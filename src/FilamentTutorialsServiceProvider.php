@@ -4,9 +4,7 @@ namespace Guava\FilamentTutorials;
 
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Facades\FilamentAsset;
-use Filament\Support\Facades\FilamentView;
-use Guava\FilamentTutorials\Contracts\HasTutorials;
-use Illuminate\View\View;
+use Guava\FilamentTutorials\View\Components\StepContainer;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -17,6 +15,9 @@ class FilamentTutorialsServiceProvider extends PackageServiceProvider
         $package
             ->name('filament-tutorials')
             ->hasViews()
+            ->hasViewComponents('filament-tutorials',
+                StepContainer::class,
+            )
         ;
     }
 

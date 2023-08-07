@@ -25,24 +25,28 @@
             </defs>
         </svg>
 
-        <div data-wrapper class="w-screen h-screen fixed top-0 left-0">
-            <div>
-                <div data-dialog
-                     class="text-primary-400 font-medium relative flex flex-col justify-center overflow-visible h-0 w-full">
-                    <div class="absolute bottom-full w-full pb-2 flex flex-row justify-between">
-                        <span>Label here</span>
-                        <span>1 / 4</span>
-                    </div>
-                    <svg data-svg class="w-full h-auto fill-none overflow-visible">
-                        <path x-bind:d="getWindowPath(24, true, true)"
-                              class="stroke-primary-400 dark:stroke-primary-500 stroke-2"
-                        />
-                    </svg>
-                    <div class="absolute top-full w-full pt-2 flex flex-row items-start justify-between gap-x-2">
-                        <span>irure do duis irure magna cupidatat dolor et irure do duis irure magna cupidatat dolor et irure do duis irure magna cupidatat dolor et</span>
+        <div data-wrapper class="w-screen h-screen fixed top-0 left-0 pointer-events-none">
+            <div data-dialog
+                 class="[clip-path:url(#myClip2)] px-[10px] bg-black dark:bg-white dark:rounded-md text-primary-400 font-medium relative flex flex-col justify-start overflow-visible w-full pointer-events-auto">
+                <div x-ref="dialogTop" class="w-full pb-2 flex flex-row justify-between">
+                    <span>Label here</span>
+                    <span>1 / 4</span>
+                </div>
+                <svg data-svg class="w-full h-auto fill-none overflow-visible">
+                    <defs>
+                        <clipPath id="myClip2">
+                            <path x-bind:d="getClipPath(24, {x:20, y: 42},true, true)"
+                            />
+                        </clipPath>
+                    </defs>
+                    <path x-bind:d="getWindowPath(24, {x:0, y:0}, true, true)"
+                          class="stroke-primary-400 dark:stroke-primary-500 stroke-2"
+                    />
+                </svg>
+                <div class="w-full pt-2 flex flex-row items-start justify-between gap-x-2">
+                    <span>irure do duis irure magna cupidatat dolor et irure do duis irure magna cupidatat dolor et irure do duis irure magna cupidatat dolor et</span>
 
-                        {{ $this->getContinueAction() }}
-                    </div>
+                    {{ $this->getContinueAction() }}
                 </div>
             </div>
         </div>

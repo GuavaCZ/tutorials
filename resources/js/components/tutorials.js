@@ -41,19 +41,24 @@ export default function tutorialsComponent() {
             // wrapper.style.height = (rect[2].y - rect[0].y + 50 + 50) + 'px';
             wrapper.style.zIndex = 1200;
 
+            const dialogTranslate = -1 * this.$refs.dialogTop.clientHeight;
+            console.log('dialogTopheight', dialogTranslate);
+
             dialog.style.position = 'absolute';
             dialog.style.left = rect[0].x + 'px';
             dialog.style.top = (rect[0].y) + 'px';
-            dialog.style.width = (rect[1].x - rect[0].x) + 'px';
-            dialog.style.height = (rect[2].y - rect[0].y) + 'px';
+            dialog.style.width = (rect[1].x - rect[0].x + 20) + 'px';
+            dialog.style.transform = 'translateX(-10px) translateY(' + (-1 * this.$refs.dialogTop.clientHeight) + 'px)';
+            //$el.style.transform = 'translateY(' + (-$refs.dialogTop.offsetHeight) + ')';
+            // dialog.style.height = (rect[2].y - rect[0].y) + 'px';
             svg.style.height = (rect[2].y - rect[0].y) + 'px';
 
         },
 
-        getWindowPath: function(radius = 24, relative = false, positive = false) {
+        getWindowPath: function(radius = 24, offset = {x:0,y:0}, relative = false, positive = false) {
             let element = document.querySelector('div.fi-fo-field-wrp');
 
-            const rect = this.getRect(element, 10, {x:0,y:0}, relative, positive);
+            const rect = this.getRect(element, 10, offset, relative, positive);
 
             let path = '';
             path += 'M ' + rect[0].x + ' ' + (rect[0].y +  radius) + ' ';
@@ -70,7 +75,7 @@ export default function tutorialsComponent() {
             return path;
         },
 
-        getClipPath: function(radius = 24) {
+        getClipPath: function(radius = 24, offset = {x: 0, y: 0}, relative = false, absolute = false) {
           //M 0 8 C 0 0 0 0 8 0 L 38 0 C 46 0 46 0 46 8 C 46 16 46 16 38 16 L 8 16 C 0 16 0 16 0 8
 
             // let element = document.querySelector('input.fi-input');
@@ -81,7 +86,7 @@ export default function tutorialsComponent() {
             path += 'L ' + window.innerWidth + ' 0 ';
             path += 'L 0 0 ';
 
-            path += this.getWindowPath(radius);
+            path += this.getWindowPath(radius, offset, relative, absolute);
 
             return path;
         },
