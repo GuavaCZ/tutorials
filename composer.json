@@ -1,0 +1,33 @@
+{
+    "name": "guava/filament-tutorials",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Guava\\FilamentTutorials\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lukas Frey",
+            "email": "lukas.frey@guava.cz"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "filament/filament": "^3.0.0",
+        "spatie/laravel-package-tools": "^1.15",
+        "livewire/livewire": "^3.0@beta"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Guava\\FilamentTutorials\\FilamentTutorialsServiceProvider"
+            ]
+        }
+    }
+}
