@@ -4,6 +4,7 @@ namespace Guava\FilamentTutorials;
 
 use Filament;
 use Filament\Contracts\Plugin;
+use Guava\FilamentTutorials\Contracts\HasTutorials;
 use Guava\FilamentTutorials\Livewire\Components\StepContainer;
 use Guava\FilamentTutorials\Livewire\Components\TutorialContainer;
 use Guava\FilamentTutorials\View\Components\Tutorials;
@@ -25,7 +26,12 @@ class FilamentTutorialsPlugin implements Plugin
 
         $panel->renderHook(
             'panels::body.start',
-            fn (): string => Blade::renderComponent(new Tutorials()),
+            fn (): View => view('filament-tutorials::render-hook', [
+                'livewire' => request()->route()->controller instanceof HasTutorials
+                    ? request()->route()->controller
+                    : null,
+            ]),
+            //            fn (): string => Blade::renderComponent(new Tutorials()),
         );
     }
 

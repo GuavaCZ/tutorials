@@ -2,12 +2,11 @@
 
 namespace Guava\FilamentTutorials\Contracts;
 
-use Guava\FilamentTutorials\Tutorial\Tutorial;
+use Guava\FilamentTutorials\Tutorial;
 
 interface HasTutorials
 {
-    /**
-     * @return array<Tutorial>
-     */
-    public function getTutorials(): array;
+    public function getTutorial(string $name): ?Tutorial;
+
+    public function isCachingForms(): bool;
 }
