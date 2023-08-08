@@ -1,33 +1,75 @@
 // Import any external JavaScript libraries from NPM here.
+// import Mousetrap from 'mousetrap';
 
-export default function tutorialsComponent() {
+export default function tutorialComponent({
+    tutorial
+                                          }) {
     return {
+        tut: null,
         // You can define any other Alpine.js properties here.
 
         init: function () {
+            this.tut = tutorial;
             console.log('Hello, world!');
+            console.log('tutorial', tutorial);
+
+            this.$watch('tut', (value) => {
+                console.log('tut changed', value);
+            })
+
+            // console.log('Mousetrap pause');
+            // Mousetrap.pause();
+
+            console.log('refs', this.$refs);
+
             setTimeout(() => {
                 this.$el.classList.remove('hidden');
                 this.showAction();
             }, 2000);
+
+            // Function to handle the keydown event
+            let tabKeys = function handleTabKey(event) {
+                console.log('event', event);
+
+                var isCtrlKey = event.ctrlKey || event.metaKey;
+                var isAltKey = event.altKey;
+                var isShiftKey = event.shiftKey;
+
+                var isModifier = isAltKey || isShiftKey || isCtrlKey;
+
+                if (isModifier) {
+                    console.log('Is modifier');
+                    console.log('isCtrlKey', isCtrlKey);
+                    console.log('isAltKey', isAltKey);
+                    console.log('isShiftKey', isShiftKey);
+                }
+
+                if (event.keyCode === 9) { // Check if the pressed key is Tab (key code 9)
+                    event.preventDefault(); // Prevent the default tabbing behavior
+                }
+            }
+
+// Attach the event listener to the document
+            document.addEventListener('keydown', tabKeys);
             // Initialise the Alpine component here, if you need to.
         },
 
         showAction: function () {
             let element = document.querySelector('div.fi-fo-field-wrp');
-            let action = document.querySelector('[data-action]');
+            // let action = document.querySelector('[data-action]');
             let svg = document.querySelector('[data-svg]');
             let wrapper = document.querySelector('[data-wrapper]');
             let dialog = document.querySelector('[data-dialog]');
+            let dialogTop = document.querySelector('[data-dialogTop]');
 
             const rect = this.getRect(element, 10);
 
-            action.classList.remove('hidden');
+            // action.classList.remove('hidden');
 
-            action.style.position = 'fixed';
-            action.style.left = (rect[2].x - action.clientWidth) + 'px';
-            action.style.top = (rect[3].y + 10) + 'px';
-            action.style.zIndex = 1000;
+            // action.style.position = 'fixed';
+            // action.style.left = (rect[2].x - action.clientWidth) + 'px';
+            // action.style.top = (rect[3].y + 10) + 'px';
+            // action.style.zIndex = 1000;
 
             // svg.style.position = 'fixed';
             // svg.style.left = rect[0].x + 'px';
@@ -41,14 +83,14 @@ export default function tutorialsComponent() {
             // wrapper.style.height = (rect[2].y - rect[0].y + 50 + 50) + 'px';
             wrapper.style.zIndex = 1200;
 
-            const dialogTranslate = -1 * this.$refs.dialogTop.clientHeight;
-            console.log('dialogTopheight', dialogTranslate);
+            // const dialogTranslate = -1 * this.$refs.dialogTop.clientHeight;
+            // console.log('dialogTopheight', dialogTranslate);
 
             dialog.style.position = 'absolute';
             dialog.style.left = rect[0].x + 'px';
             dialog.style.top = (rect[0].y) + 'px';
-            dialog.style.width = (rect[1].x - rect[0].x + 20) + 'px';
-            dialog.style.transform = 'translateX(-10px) translateY(' + (-1 * this.$refs.dialogTop.clientHeight) + 'px)';
+            dialog.style.width = (rect[1].x - rect[0].x) + 'px';
+            dialog.style.transform = 'translateY(' + (-1 * dialogTop.clientHeight) + 'px)';
             //$el.style.transform = 'translateY(' + (-$refs.dialogTop.offsetHeight) + ')';
             // dialog.style.height = (rect[2].y - rect[0].y) + 'px';
             svg.style.height = (rect[2].y - rect[0].y) + 'px';

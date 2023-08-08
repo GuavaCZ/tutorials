@@ -4,10 +4,11 @@ namespace Guava\FilamentTutorials;
 
 use Filament;
 use Filament\Contracts\Plugin;
-use Filament\Support\Assets\AlpineComponent;
-use Filament\Support\Facades\FilamentAsset;
-use Guava\FilamentTutorials\Livewire\Components\Tutorials;
+use Guava\FilamentTutorials\Livewire\Components\StepContainer;
+use Guava\FilamentTutorials\Livewire\Components\TutorialContainer;
+use Guava\FilamentTutorials\View\Components\Tutorials;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\View\View;
 use Livewire\Livewire;
 
 class FilamentTutorialsPlugin implements Plugin
@@ -19,11 +20,12 @@ class FilamentTutorialsPlugin implements Plugin
 
     public function register(Filament\Panel $panel): void
     {
-        Livewire::component('filament-tutorials::tutorials', Tutorials::class);
+        Livewire::component('filament-tutorials::tutorial-container', TutorialContainer::class);
+        Livewire::component('filament-tutorials::step-container', StepContainer::class);
 
         $panel->renderHook(
             'panels::body.start',
-            fn (): string => Blade::render('@livewire(\'filament-tutorials::tutorials\')'),
+            fn (): string => Blade::renderComponent(new Tutorials()),
         );
     }
 
