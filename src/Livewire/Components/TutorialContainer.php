@@ -7,8 +7,9 @@ use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Support\Contracts\TranslatableContentDriver;
 use Guava\FilamentTutorials\Step;
-use Guava\FilamentTutorials\Tutorial\Tutorial;
+use Guava\FilamentTutorials\Tutorial;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 use Livewire\Attributes\Js;
 use Livewire\Component;
 
@@ -20,9 +21,12 @@ class TutorialContainer extends Component implements HasActions
     //
     //    public int $currentStep = 1;
 
+
     public array $steps;
 
-    protected string $activeStepKey = '';
+    public ?string $activeStepKey = null;
+
+    public int $activeStepIndex = 0;
 
     public function activeStepKey(string $activeStepKey): static
     {
@@ -44,6 +48,29 @@ class TutorialContainer extends Component implements HasActions
     public function setActiveStep(string $step): void
     {
         $this->activeStepKey = $step;
+    }
+
+    public function nextStep(): void
+    {
+        $this->activeStepIndex++;
+        $step = Arr::get(array_values($this->steps), $this->activeStepIndex);
+
+        if ($step) {
+            $this->setActiveStep($step->getKey());
+        } else {
+            $this->complete();
+        }
+    }
+
+    public function begin(): void
+    {
+        $this->activeStepKey = Arr::first($this->steps)->getKey();
+    }
+
+    public function complete(): void
+    {
+        $this->activeStepKey = null;
+//        $this->tutorial->callAfterCompleted();
     }
 
     public function getStep(string | Closure $findStepUsing, bool $withHidden = false): ?Step
@@ -68,6 +95,7 @@ class TutorialContainer extends Component implements HasActions
     public function mount(array $steps): void
     {
         $this->steps = $steps;
+        $this->begin();
         //        $this->livewire = request()->route()->controller;
     }
 

@@ -1,16 +1,23 @@
-<div
-        x-data
-        x-cloak
-        x-show="true"
-        @class([
-            'fixed top-0 left-0 w-screen h-screen z-30 pointer-events-none',
-            'bg-black/80',
-            'dark:bg-gray-800/80',
-        ])
->
-        <button type="button" wire:click="setActiveStep('name')" class="pointer-events-auto">Test</button>
-        {{ $this->getActiveStep() }}
-</div>{{--<div>--}}
+<div>
+    @if ($this->activeStepKey)
+        <div
+                x-data
+                {{--        x-cloak--}}
+                {{--        x-show="true"--}}
+                @class([
+                    'fixed top-0 left-0 w-screen h-screen z-40',
+                    'bg-black/80',
+                    '[clip-path:url(#stepClipPath)]',
+                    'dark:bg-gray-800/80',
+                ])
+        >
+            <div
+                    wire:key="{{$this->activeStepKey}}">
+                {{ $this->getStep($this->activeStepKey) }}
+            </div>
+        </div>{{--<div>--}}
+    @endif
+</div>
 {{--    <div--}}
 {{--            x-ignore--}}
 {{--            ax-load--}}

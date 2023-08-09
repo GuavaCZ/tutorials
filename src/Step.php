@@ -2,7 +2,9 @@
 
 namespace Guava\FilamentTutorials;
 
+use Filament\Actions\Action;
 use Filament\Support\Components\ViewComponent;
+use Filament\Support\Concerns\HasColor;
 use Illuminate\Support\Arr;
 use Livewire\Wireable;
 
@@ -14,6 +16,12 @@ class Step extends ViewComponent implements Wireable
     //    use Concerns\CanBeConcealed;
     //    use Concerns\CanBeDisabled;
     use Concerns\CanBeHidden;
+    use Concerns\HasKey;
+    use Concerns\HasName;
+    use Concerns\HasLabel;
+    use Concerns\HasHint;
+    use Concerns\HasDescription;
+    use HasColor;
 
     //    use Concerns\CanSpanColumns;
     //    use Concerns\Cloneable;
@@ -22,7 +30,6 @@ class Step extends ViewComponent implements Wireable
     //    use Concerns\HasFieldWrapper;
     //    use Concerns\HasId;
     //    use Concerns\HasInlineLabel;
-    use Concerns\HasKey;
 
     //    use Concerns\HasLabel;
     //    use Concerns\HasMaxWidth;
@@ -32,7 +39,6 @@ class Step extends ViewComponent implements Wireable
     //    use HasColumns;
     //    use HasExtraAttributes;
     //    use HasStateBindingModifiers;
-    use Concerns\HasName;
 
     protected string $view = 'filament-tutorials::step';
 
@@ -47,6 +53,7 @@ class Step extends ViewComponent implements Wireable
             //            'context', 'operation' => [$this->getContainer()->getOperation()],
             //            'get' => [$this->getGetCallback()],
             'livewire' => [$this->getLivewire()],
+            'step' => [$this],
             //            'model' => [$this->getModel()],
             //            'record' => [$this->getRecord()],
             //            'set' => [$this->getSetCallback()],
@@ -94,6 +101,17 @@ class Step extends ViewComponent implements Wireable
         return static::make($name)
             ->name($name)
             ->key($key)
+        ;
+    }
+
+    public function getContinueAction()
+    {
+
+        //        <button type="button" wire:click="setActiveStep('email')" class="pointer-events-auto">Test</button>
+        return Action::make('continue')
+            ->color($this->getColor())
+            ->label('Continue')
+            ->action('nextStep()')
         ;
     }
 }

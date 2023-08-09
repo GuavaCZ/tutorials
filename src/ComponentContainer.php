@@ -2,7 +2,6 @@
 
 namespace Guava\FilamentTutorials;
 
-use Filament\Forms\Contracts\HasForms;
 use Filament\Support\Components\ViewComponent;
 use Guava\FilamentTutorials\Contracts\HasTutorials;
 use Illuminate\Database\Eloquent\Model;
@@ -10,23 +9,27 @@ use Illuminate\Database\Eloquent\Model;
 class ComponentContainer extends ViewComponent
 {
     use Concerns\BelongsToLivewire;
-//    use BelongsToModel;
-//    use Concerns\BelongsToParentComponent;
-//    use Concerns\CanBeDisabled;
-//    use Concerns\CanBeHidden;
-//    use Concerns\CanBeValidated;
-//    use Concerns\Cloneable;
-//    use Concerns\HasColumns;
+
+    //    use BelongsToModel;
+    //    use Concerns\BelongsToParentComponent;
+    //    use Concerns\CanBeDisabled;
+    //    use Concerns\CanBeHidden;
+    //    use Concerns\CanBeValidated;
+    //    use Concerns\Cloneable;
+    //    use Concerns\HasColumns;
     use Concerns\HasSteps;
-//    use Concerns\HasFieldWrapper;
-//    use Concerns\HasInlineLabels;
-//    use Concerns\HasOperation;
-//    use Concerns\HasState;
-//    use Concerns\HasStateBindingModifiers;
-//    use Concerns\ListensToEvents;
-//    use Concerns\SupportsComponentFileAttachments;
-//    use Concerns\SupportsFileUploadFields;
-//    use Concerns\SupportsSelectFields;
+
+    //    use Concerns\HasFieldWrapper;
+    //    use Concerns\HasInlineLabels;
+    //    use Concerns\HasOperation;
+    //    use Concerns\HasState;
+    //    use Concerns\HasStateBindingModifiers;
+    //    use Concerns\ListensToEvents;
+    //    use Concerns\SupportsComponentFileAttachments;
+    //    use Concerns\SupportsFileUploadFields;
+    //    use Concerns\SupportsSelectFields;
+    use Concerns\CanBeTriggered;
+    use Concerns\CanBeCompleted;
 
     protected string $view = 'filament-tutorials::component-container';
 
@@ -51,26 +54,26 @@ class ComponentContainer extends ViewComponent
     {
         return match ($parameterName) {
             'livewire' => [$this->getLivewire()],
-//            'model' => [$this->getModel()],
-//            'record' => [$this->getRecord()],
+            //            'model' => [$this->getModel()],
+            //            'record' => [$this->getRecord()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
     }
 
-//    /**
-//     * @return array<mixed>
-//     */
-//    protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
-//    {
-//        $record = $this->getRecord();
-//
-//        if (! $record) {
-//            return parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType);
-//        }
-//
-//        return match ($parameterType) {
-//            Model::class, $record::class => [$record],
-//            default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
-//        };
-//    }
+    //    /**
+    //     * @return array<mixed>
+    //     */
+    //    protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
+    //    {
+    //        $record = $this->getRecord();
+    //
+    //        if (! $record) {
+    //            return parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType);
+    //        }
+    //
+    //        return match ($parameterType) {
+    //            Model::class, $record::class => [$record],
+    //            default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
+    //        };
+    //    }
 }

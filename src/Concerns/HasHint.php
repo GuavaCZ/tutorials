@@ -21,8 +21,8 @@ trait HasHint
     {
         return $this->evaluate($this->hint, [
             'livewire' => $this->getLivewire(),
-            'index' => $this->getIndex(),
-            'steps' => $this->getSteps(),
+//            'index' => $this->getIndex(),
+//            'steps' => $this->getSteps(),
         ]);
     }
 

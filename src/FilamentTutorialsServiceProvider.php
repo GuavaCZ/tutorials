@@ -27,6 +27,7 @@ class FilamentTutorialsServiceProvider extends PackageServiceProvider
     {
         FilamentAsset::register([
             AlpineComponent::make('tutorial', __DIR__.'/../resources/js/dist/components/tutorial.js'),
+            AlpineComponent::make('step', __DIR__.'/../resources/js/dist/components/step.js'),
         ], package: 'guava/filament-tutorials');
     }
 }

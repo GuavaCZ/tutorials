@@ -48,3 +48,9 @@ compile({
     entryPoints: ['./resources/js/components/tutorial.js'],
     outfile: './resources/js/dist/components/tutorial.js',
 })
+
+compile({
+    ...defaultOptions,
+    entryPoints: ['./resources/js/components/step.js'],
+    outfile: './resources/js/dist/components/step.js',
+})

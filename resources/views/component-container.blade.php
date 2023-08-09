@@ -1,6 +1,8 @@
-<livewire:filament-tutorials::tutorial-container
-        :steps="$getSteps()"
-/>
+@if($isTriggered())
+    <livewire:filament-tutorials::tutorial-container
+            :steps="$getSteps()"
+    />
+@endif
 {{--<div--}}
 {{--        x-data--}}
 {{--        x-cloak--}}
