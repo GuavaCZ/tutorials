@@ -3,15 +3,16 @@
 namespace Guava\Tutorials\Steps;
 
 use Filament\Actions\Action;
+use Filament\Forms\Components\Component;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Get;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasColor;
 use Guava\Tutorials\Concerns;
 use Guava\Tutorials\Selectors\FieldSelector;
 use Guava\Tutorials\Selectors\Selector;
-use Illuminate\Support\Arr;
-use Livewire\Wireable;
 
-class Step extends ViewComponent implements Wireable
+class Step extends ViewComponent
 {
     use Concerns\BelongsToContainer;
 
@@ -47,7 +48,9 @@ class Step extends ViewComponent implements Wireable
 
     protected string $view = 'tutorials::step';
 
-    protected string $evaluationIdentifier = 'component';
+    protected string $evaluationIdentifier = 'step';
+
+    protected string $viewIdentifier = 'step';
 
     protected Selector $selector;
 
@@ -99,49 +102,6 @@ class Step extends ViewComponent implements Wireable
         ;
     }
 
-    public function toLivewire()
-    {
-        return [
-            'name' => $this->getName(),
-            'key' => $this->getKey(),
-            'color' => $this->getColor(),
-            'isInteractive' => $this->isInteractive(),
-            'selector' => $this->getSelector(),
-            'label' => $this->getLabel(),
-            'hint' => $this->getHint(),
-            'description' => $this->getDescription(),
-            'hiddenAction' => $this->isHiddenAction(),
-            'requiresAction' => $this->isActionRequired(),
-        ];
-    }
-
-    public static function fromLivewire($value)
-    {
-        $name = Arr::get($value, 'name');
-        $key = Arr::get($value, 'key');
-        $color = Arr::get($value, 'color');
-        $isInteractive = Arr::get($value, 'isInteractive');
-        $selector = Arr::get($value, 'selector');
-        $label = Arr::get($value, 'label');
-        $hint = Arr::get($value, 'hint');
-        $description = Arr::get($value, 'description');
-        $hiddenAction = Arr::get($value, 'hiddenAction');
-        $requiresAction = Arr::get($value, 'requiresAction');
-
-        return static::make($name)
-            ->name($name)
-            ->key($key)
-            ->label($label)
-            ->hint($hint)
-            ->description($description)
-            ->color($color)
-            ->interactive($isInteractive)
-            ->selector($selector)
-            ->hiddenAction($hiddenAction)
-            ->requiresAction($requiresAction)
-        ;
-    }
-
     public function selector(Selector $selector): static
     {
         $this->selector = $selector;
@@ -168,6 +128,17 @@ class Step extends ViewComponent implements Wireable
         return $static;
     }
 
+    protected function getGetCallback(): callable
+    {
+        $component = new Component();
+        /** @var HasForms $livewire */
+        $livewire = $this->getLivewire();
+        $form = $livewire->getForm('form');
+        $component->container($form);
+
+        return new Get($component);
+    }
+
     /**
      * @return array<mixed>
      */
@@ -178,6 +149,7 @@ class Step extends ViewComponent implements Wireable
             //            'get' => [$this->getGetCallback()],
             'livewire' => [$this->getLivewire()],
             'step' => [$this],
+            'get' => [$this->getGetCallback()],
             //            'model' => [$this->getModel()],
             //            'record' => [$this->getRecord()],
             //            'set' => [$this->getSetCallback()],

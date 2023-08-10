@@ -2,6 +2,9 @@
 
 namespace Guava\Tutorials;
 
+use Filament\Forms\Components\Component;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Get;
 use Filament\Support\Components\ViewComponent;
 use Guava\Tutorials\Contracts\HasTutorials;
 use Illuminate\Database\Eloquent\Model;
@@ -47,6 +50,18 @@ class ComponentContainer extends ViewComponent
         return app(static::class, ['livewire' => $livewire]);
     }
 
+
+    protected function getGetCallback(): callable
+    {
+        $component = new Component();
+        /** @var HasForms $livewire */
+        $livewire = $this->getLivewire();
+        $form = $livewire->getForm('form');
+        $component->container($form);
+
+        return new Get($component);
+    }
+
     /**
      * @return array<mixed>
      */
@@ -54,6 +69,7 @@ class ComponentContainer extends ViewComponent
     {
         return match ($parameterName) {
             'livewire' => [$this->getLivewire()],
+            'get' => [$this->getGetCallback()],
             //            'model' => [$this->getModel()],
             //            'record' => [$this->getRecord()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),

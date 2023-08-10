@@ -4,6 +4,10 @@ namespace Guava\Tutorials\Concerns;
 
 use Closure;
 use Exception;
+use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ViewRecord;
 use Guava\Tutorials\Tutorial;
 
 trait InteractsWithTutorials
@@ -127,5 +131,23 @@ trait InteractsWithTutorials
     public function isCachingTutorials(): bool
     {
         return $this->isCachingTutorials;
+    }
+
+    public function boot(): void
+    {
+        static::$view = static::getView();
+    }
+
+    public static function getView(): string
+    {
+        $page = new static();
+
+        return match (true) {
+            $page instanceof ListRecords => 'tutorials::filament.pages.list-records',
+            $page instanceof CreateRecord => 'tutorials::filament.pages.create-record',
+            $page instanceof EditRecord => 'tutorials::filament.pages.edit-record',
+            $page instanceof ViewRecord => 'tutorials::filament.pages.view-record',
+            default => static::$view,
+        };
     }
 }

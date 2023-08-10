@@ -1,7 +1,7 @@
 @if($isTriggered())
-    <livewire:tutorials::tutorial-container
-            :steps="$getSteps()"
-    />
+    @foreach($getSteps() as $step)
+        {{$step}}
+    @endforeach
 @endif
 {{--<div--}}
 {{--        x-data--}}

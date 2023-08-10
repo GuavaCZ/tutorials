@@ -1,3 +1,5 @@
+@php
+@endphp
 <div
         x-ignore
         ax-load
