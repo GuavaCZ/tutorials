@@ -1,18 +1,18 @@
 <?php
 
-namespace Guava\FilamentTutorials;
+namespace Guava\Tutorials;
 
 use Filament;
 use Filament\Contracts\Plugin;
-use Guava\FilamentTutorials\Contracts\HasTutorials;
-use Guava\FilamentTutorials\Livewire\Components\StepContainer;
-use Guava\FilamentTutorials\Livewire\Components\TutorialContainer;
-use Guava\FilamentTutorials\View\Components\Tutorials;
+use Guava\Tutorials\Contracts\HasTutorials;
+use Guava\Tutorials\Livewire\Components\StepContainer;
+use Guava\Tutorials\Livewire\Components\TutorialContainer;
+use Guava\Tutorials\View\Components\Tutorials;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\View;
 use Livewire\Livewire;
 
-class FilamentTutorialsPlugin implements Plugin
+class TutorialsPlugin implements Plugin
 {
     public function getId(): string
     {

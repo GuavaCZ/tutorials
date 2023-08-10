@@ -1,12 +1,12 @@
 <?php
 
-namespace Guava\FilamentTutorials\Livewire\Components;
+namespace Guava\Tutorials\Livewire\Components;
 
 use Closure;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Support\Contracts\TranslatableContentDriver;
-use Guava\FilamentTutorials\Steps\Step;
+use Guava\Tutorials\Steps\Step;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 use Livewire\Attributes\Js;

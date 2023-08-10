@@ -1,10 +1,10 @@
 <?php
 
-namespace Guava\FilamentTutorials\Concerns;
+namespace Guava\Tutorials\Concerns;
 
 use Closure;
 use Exception;
-use Guava\FilamentTutorials\Tutorial;
+use Guava\Tutorials\Tutorial;
 
 trait InteractsWithTutorials
 {

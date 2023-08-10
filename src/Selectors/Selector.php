@@ -1,6 +1,6 @@
 <?php
 
-namespace Guava\FilamentTutorials\Selectors;
+namespace Guava\Tutorials\Selectors;
 
 use Illuminate\Support\Arr;
 use Livewire\Wireable;

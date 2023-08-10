@@ -1,8 +1,8 @@
 <?php
 
-namespace Guava\FilamentTutorials\Contracts;
+namespace Guava\Tutorials\Contracts;
 
-use Guava\FilamentTutorials\Tutorial;
+use Guava\Tutorials\Tutorial;
 
 interface HasTutorials
 {

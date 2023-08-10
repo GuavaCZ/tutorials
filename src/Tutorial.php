@@ -1,6 +1,6 @@
 <?php
 
-namespace Guava\FilamentTutorials;
+namespace Guava\Tutorials;
 
 class Tutorial extends ComponentContainer
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Guava\FilamentTutorials;
+namespace Guava\Tutorials;
 
 use Filament\Support\Components\ViewComponent;
-use Guava\FilamentTutorials\Contracts\HasTutorials;
+use Guava\Tutorials\Contracts\HasTutorials;
 use Illuminate\Database\Eloquent\Model;
 
 class ComponentContainer extends ViewComponent

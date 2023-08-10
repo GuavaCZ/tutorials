@@ -1,8 +1,8 @@
 <?php
 
-namespace Guava\FilamentTutorials\Concerns;
+namespace Guava\Tutorials\Concerns;
 
-use Guava\FilamentTutorials\Contracts\HasTutorials;
+use Guava\Tutorials\Contracts\HasTutorials;
 
 trait BelongsToLivewire
 {

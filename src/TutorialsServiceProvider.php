@@ -1,15 +1,15 @@
 <?php
 
-namespace Guava\FilamentTutorials;
+namespace Guava\Tutorials;
 
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Facades\FilamentAsset;
-use Guava\FilamentTutorials\Livewire\Components\StepContainer;
-use Guava\FilamentTutorials\View\Components\Tutorials;
+use Guava\Tutorials\Livewire\Components\StepContainer;
+use Guava\Tutorials\View\Components\Tutorials;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class FilamentTutorialsServiceProvider extends PackageServiceProvider
+class TutorialsServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {

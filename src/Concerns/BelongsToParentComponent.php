@@ -1,6 +1,6 @@
 <?php
 
-namespace Guava\FilamentTutorials\Concerns;
+namespace Guava\Tutorials\Concerns;
 
 
 trait BelongsToParentComponent

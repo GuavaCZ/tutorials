@@ -1,9 +1,9 @@
 <?php
 
-namespace Guava\FilamentTutorials\Concerns;
+namespace Guava\Tutorials\Concerns;
 
-use Guava\FilamentTutorials\ComponentContainer;
-use Guava\FilamentTutorials\Contracts\HasTutorials;
+use Guava\Tutorials\ComponentContainer;
+use Guava\Tutorials\Contracts\HasTutorials;
 
 trait BelongsToContainer
 {

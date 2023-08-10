@@ -1,9 +1,9 @@
 <?php
 
-namespace Guava\FilamentTutorials\Concerns;
+namespace Guava\Tutorials\Concerns;
 
 use Closure;
-use Guava\FilamentTutorials\Steps\Step;
+use Guava\Tutorials\Steps\Step;
 
 trait HasSteps
 {

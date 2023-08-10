@@ -1,9 +1,9 @@
 <?php
 
-namespace Guava\FilamentTutorials\Concerns;
+namespace Guava\Tutorials\Concerns;
 
 use Closure;
-use Guava\FilamentTutorials\Tutorial\Tutorial;
+use Guava\Tutorials\Tutorial\Tutorial;
 
 trait BelongsToTutorial
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Guava\FilamentTutorials\Steps;
+namespace Guava\Tutorials\Steps;
 
 use Filament\Actions\Action;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasColor;
-use Guava\FilamentTutorials\Concerns;
-use Guava\FilamentTutorials\Selectors\FieldSelector;
-use Guava\FilamentTutorials\Selectors\Selector;
+use Guava\Tutorials\Concerns;
+use Guava\Tutorials\Selectors\FieldSelector;
+use Guava\Tutorials\Selectors\Selector;
 use Illuminate\Support\Arr;
 use Livewire\Wireable;
 

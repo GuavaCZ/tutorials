@@ -1,6 +1,6 @@
 <?php
 
-namespace Guava\FilamentTutorials\Steps;
+namespace Guava\Tutorials\Steps;
 
 class DialogStep
 {
