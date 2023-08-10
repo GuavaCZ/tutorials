@@ -24,7 +24,7 @@ class StepContainer extends Component implements HasActions
 
     public function render(): View
     {
-        return view('filament-tutorials::livewire.step-container');
+        return view('tutorials::livewire.step-container');
     }
 
     #[Js]

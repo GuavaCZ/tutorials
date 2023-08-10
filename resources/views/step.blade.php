@@ -1,7 +1,7 @@
 <div
         x-ignore
         ax-load
-        ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('step', 'guava/filament-tutorials') }}"
+        ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('step', 'guava/tutorials') }}"
 
         x-data="stepComponent({
         key: '{{$getKey()}}',

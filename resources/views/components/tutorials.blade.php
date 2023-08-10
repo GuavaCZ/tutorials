@@ -1,7 +1,7 @@
 @if($enabled)
     <div>
         @foreach($tutorials as $tutorial)
-            <livewire:filament-tutorials::tutorial-container
+            <livewire:tutorials::tutorial-container
                     :tutorial="$tutorial"
             />
         @endforeach

@@ -14,9 +14,9 @@ class FilamentTutorialsServiceProvider extends PackageServiceProvider
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('filament-tutorials')
+            ->name('tutorials')
             ->hasViews()
-            ->hasViewComponents('filament-tutorials',
+            ->hasViewComponents('tutorials',
                 Tutorials::class,
                 StepContainer::class,
             )
@@ -28,6 +28,6 @@ class FilamentTutorialsServiceProvider extends PackageServiceProvider
         FilamentAsset::register([
             AlpineComponent::make('tutorial', __DIR__.'/../resources/js/dist/components/tutorial.js'),
             AlpineComponent::make('step', __DIR__.'/../resources/js/dist/components/step.js'),
-        ], package: 'guava/filament-tutorials');
+        ], package: 'guava/tutorials');
     }
 }

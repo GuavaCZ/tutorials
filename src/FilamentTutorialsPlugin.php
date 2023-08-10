@@ -16,17 +16,17 @@ class FilamentTutorialsPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'guava::filament-tutorials';
+        return 'guava::tutorials';
     }
 
     public function register(Filament\Panel $panel): void
     {
-        Livewire::component('filament-tutorials::tutorial-container', TutorialContainer::class);
-        Livewire::component('filament-tutorials::step-container', StepContainer::class);
+        Livewire::component('tutorials::tutorial-container', TutorialContainer::class);
+        Livewire::component('tutorials::step-container', StepContainer::class);
 
         $panel->renderHook(
             'panels::body.start',
-            fn (): View => view('filament-tutorials::render-hook', [
+            fn (): View => view('tutorials::render-hook', [
                 'livewire' => request()->route()->controller instanceof HasTutorials
                     ? request()->route()->controller
                     : null,

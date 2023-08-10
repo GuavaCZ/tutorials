@@ -27,7 +27,7 @@
 {{--    <div--}}
 {{--            x-ignore--}}
 {{--            ax-load--}}
-{{--            ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('tutorial', 'guava/filament-tutorials') }}"--}}
+{{--            ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('tutorial', 'guava/tutorials') }}"--}}
 
 {{--            x-data="tutorialComponent({--}}
 {{--                tutorial: $wire.$entangle('tutorial'),--}}
@@ -42,7 +42,7 @@
 {{--        <span x-text="$wire.tutorial.test"></span>--}}
 
 {{--        @foreach($tutorial->getSteps() as $step)--}}
-{{--            <livewire:filament-tutorials::step-container--}}
+{{--            <livewire:tutorials::step-container--}}
 {{--                    :step="$step"--}}
 {{--            />--}}
 {{--        @endforeach--}}

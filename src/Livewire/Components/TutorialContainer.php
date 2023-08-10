@@ -100,7 +100,7 @@ class TutorialContainer extends Component implements HasActions
 
     public function render(): View
     {
-        return view('filament-tutorials::livewire.tutorial-container');
+        return view('tutorials::livewire.tutorial-container');
     }
 
     #[Js]

@@ -1,5 +1,5 @@
 {
-    "name": "guava/filament-tutorials",
+    "name": "guava/tutorials",
     "type": "library",
     "license": "MIT",
     "autoload": {

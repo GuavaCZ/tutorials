@@ -31,7 +31,7 @@ class ComponentContainer extends ViewComponent
     use Concerns\CanBeTriggered;
     use Concerns\CanBeCompleted;
 
-    protected string $view = 'filament-tutorials::component-container';
+    protected string $view = 'tutorials::component-container';
 
     protected string $evaluationIdentifier = 'container';
 

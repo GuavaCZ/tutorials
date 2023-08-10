@@ -45,7 +45,7 @@ class Step extends ViewComponent implements Wireable
     //    use HasExtraAttributes;
     //    use HasStateBindingModifiers;
 
-    protected string $view = 'filament-tutorials::step';
+    protected string $view = 'tutorials::step';
 
     protected string $evaluationIdentifier = 'component';
 

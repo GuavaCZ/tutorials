@@ -1,5 +1,5 @@
 @if($isTriggered())
-    <livewire:filament-tutorials::tutorial-container
+    <livewire:tutorials::tutorial-container
             :steps="$getSteps()"
     />
 @endif
