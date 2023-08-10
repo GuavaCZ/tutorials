@@ -4,7 +4,6 @@ namespace Guava\FilamentTutorials\Concerns;
 
 use Closure;
 use Exception;
-use Guava\FilamentTutorials\Step;
 use Guava\FilamentTutorials\Tutorial;
 
 trait InteractsWithTutorials

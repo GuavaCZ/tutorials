@@ -30,7 +30,7 @@ class FieldSelector extends Selector
         return "#data\\.{$this->selector}";
     }
 
-    public function toLivewire()
+    public function toLivewire(): array
     {
         return [
             'selector' => $this->selector,
@@ -38,7 +38,7 @@ class FieldSelector extends Selector
         ];
     }
 
-    public static function fromLivewire($value)
+    public static function fromLivewire($value): static
     {
 //        $selector = Arr::get($value, 'selector');
         $class = Arr::pull($value, 'class');

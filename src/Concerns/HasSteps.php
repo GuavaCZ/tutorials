@@ -3,7 +3,7 @@
 namespace Guava\FilamentTutorials\Concerns;
 
 use Closure;
-use Guava\FilamentTutorials\Step;
+use Guava\FilamentTutorials\Steps\Step;
 
 trait HasSteps
 {
