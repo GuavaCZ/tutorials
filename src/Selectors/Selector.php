@@ -2,7 +2,10 @@
 
 namespace Guava\FilamentTutorials\Selectors;
 
-class Selector
+use Livewire\Wireable;
+
+abstract class Selector implements Wireable
 {
+    abstract public function __toString(): string;
 
 }

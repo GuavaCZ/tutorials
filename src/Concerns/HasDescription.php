@@ -6,11 +6,11 @@ use Closure;
 
 trait HasDescription
 {
-    public string|Closure|null $description = null;
+    public string | Closure | null $description = null;
 
-    public bool|Closure $hiddenDescription = false;
+    public bool | Closure $hiddenDescription = false;
 
-    public function description(string|Closure $description): static
+    public function description(string | Closure | null $description): static
     {
         $this->description = $description;
 
@@ -22,7 +22,7 @@ trait HasDescription
         return $this->evaluate($this->description);
     }
 
-    public function hiddenDescription(bool|Closure $condition = true): static
+    public function hiddenDescription(bool | Closure $condition = true): static
     {
         $this->hiddenDescription = $condition;
 

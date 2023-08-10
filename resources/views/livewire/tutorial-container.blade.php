@@ -1,5 +1,11 @@
 <div>
     @if ($this->activeStepKey)
+        @if(! $this->getStep($this->activeStepKey)->isInteractive())
+            <div class="fixed top-0 left-0 w-screen h-screen z-30" wire:key="{{$this->activeStepKey}}-interactivity"
+            x-on:click.prevent.stop
+            ></div>
+        @endif
+
         <div
                 x-data
                 {{--        x-cloak--}}
@@ -10,9 +16,9 @@
                     '[clip-path:url(#stepClipPath)]',
                     'dark:bg-gray-800/80',
                 ])
+                x-on:click.prevent.stop
         >
-            <div
-                    wire:key="{{$this->activeStepKey}}">
+            <div wire:key="{{$this->activeStepKey}}">
                 {{ $this->getStep($this->activeStepKey) }}
             </div>
         </div>{{--<div>--}}

@@ -6,11 +6,11 @@ use Closure;
 
 trait HasHint
 {
-    public string|Closure|null $hint = null;
+    public string | Closure | null $hint = null;
 
-    public bool|Closure $hiddenHint = false;
+    public bool | Closure $hiddenHint = false;
 
-    public function hint(string|Closure $hint): static
+    public function hint(string | Closure | null $hint): static
     {
         $this->hint = $hint;
 
@@ -20,13 +20,13 @@ trait HasHint
     public function getHint(): ?string
     {
         return $this->evaluate($this->hint, [
-            'livewire' => $this->getLivewire(),
-//            'index' => $this->getIndex(),
-//            'steps' => $this->getSteps(),
+            //            'livewire' => $this->getLivewire(),
+            //            'index' => $this->getIndex(),
+            //            'steps' => $this->getSteps(),
         ]);
     }
 
-    public function hiddenHint(bool|Closure $condition = true): static
+    public function hiddenHint(bool | Closure $condition = true): static
     {
         $this->hiddenHint = $condition;
 

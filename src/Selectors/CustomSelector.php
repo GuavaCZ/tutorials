@@ -4,8 +4,9 @@ namespace Guava\FilamentTutorials\Selectors;
 
 use Illuminate\Support\Arr;
 
-class FieldSelector extends Selector
+class CustomSelector extends Selector
 {
+
     protected string $selector;
 
     public function __construct(string $selector)
@@ -27,22 +28,20 @@ class FieldSelector extends Selector
 
     public function __toString(): string
     {
-        return "#data\\.{$this->selector}";
+        return $this->selector;
     }
 
     public function toLivewire()
     {
         return [
             'selector' => $this->selector,
-            'class' => static::class,
         ];
     }
 
     public static function fromLivewire($value)
     {
-//        $selector = Arr::get($value, 'selector');
-        $class = Arr::pull($value, 'class');
+        $selector = Arr::get($value, 'selector');
 
-        return app($class, $value);
+        return static::make($selector);
     }
 }

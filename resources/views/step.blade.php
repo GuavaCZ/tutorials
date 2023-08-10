@@ -1,17 +1,19 @@
 <div
-    x-ignore
-    ax-load
-    ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('step', 'guava/filament-tutorials') }}"
+        x-ignore
+        ax-load
+        ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('step', 'guava/filament-tutorials') }}"
 
-    x-data="stepComponent({
+        x-data="stepComponent({
         key: '{{$getKey()}}',
+        selector: '{{$getSelector()}}',
+        requiresAction: @js($isActionRequired()),
     })"
 
-    class="absolute top-0 left-0"
+        class="absolute top-0 left-0"
 
-    @style([
-        \Filament\Support\get_color_css_variables($getColor(), shades: [400, 500, 600]) => $getColor() !== 'gray',
-    ])
+        @style([
+            \Filament\Support\get_color_css_variables($getColor(), shades: [400, 500, 600]) => $getColor() !== 'gray',
+        ])
 >
     <div
             @class([
@@ -24,7 +26,7 @@
 
             x-init="initializeDialog($el)"
     >
-        <div data-dialog-header class="flex flex-row justify-between">
+        <div data-dialog-header class="flex flex-row justify-between whitespace-nowrap">
             @if(! $isLabelHidden() && $label = $getLabel())
                 <span>{{ $label }}</span>
             @endif
@@ -50,8 +52,11 @@
                 <span>{{ $description }}</span>
             @endif
 
-{{--            <button type="button" wire:click="setActiveStep('email')" class="pointer-events-auto">Test</button>--}}
-            <span>{{$getContinueAction()}}</span>
+            @if(! $isHiddenAction() && $action = $getContinueAction())
+                {{--            <button type="button" wire:click="setActiveS
+                tep('email')" class="pointer-events-auto">Test</button>--}}
+                <span class="ml-auto">{{$action}}</span>
+            @endif
         </div>
     </div>
 
@@ -63,7 +68,7 @@
             </clipPath>
 
             <clipPath id="myClip">
-                <path d="M 0 0 L 0 500 L 500 500 L 500 0 L 0 0 M 300 300 L 400 300 L 400 350 L 300 350 L 300 300" />
+                <path d="M 0 0 L 0 500 L 500 500 L 500 0 L 0 0 M 300 300 L 400 300 L 400 350 L 300 350 L 300 300"/>
                 {{--                <circle r="50" cx="50" cy="50"/>--}}
                 {{--                <path x-bind:d="getClipPath()"/>--}}
             </clipPath>

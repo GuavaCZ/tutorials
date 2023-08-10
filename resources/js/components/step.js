@@ -3,6 +3,8 @@
 
 export default function stepComponent({
     key,
+    selector,
+    requiresAction,
                                       }) {
     return {
         targetElement: null,
@@ -10,26 +12,46 @@ export default function stepComponent({
 
         init: function () {
             this.targetElement = this.findElement(key);
+            console.log('requiresAction', requiresAction);
+
+            if (requiresAction) {
+                this.targetElement.addEventListener('click', (event) => {
+                    // event.stopPropagation();
+                    event.preventDefault();
+                    console.log('$wire', this.$wire.nextStep());
+
+                    this.targetElement.blur();
+                    const descendants = this.targetElement.querySelectorAll(":hover");
+
+                    for (let i = 0; i < descendants.length; i++) {
+                        const descendant = descendants[i];
+                        descendant.blur();
+                    }
+                });
+            }
         },
         // You can define any other Alpine.js functions here.
 
         initializeDialog: function (dialog) {
-            const rect = this.elementRect();
-            const header = dialog.querySelector('[data-dialog-header]');
-            const stroke = dialog.querySelector('[data-dialog-stroke]');
+                const rect = this.elementRect();
+                const header = dialog.querySelector('[data-dialog-header]');
+                const stroke = dialog.querySelector('[data-dialog-stroke]');
 
-            const width = rect[1].x - rect[0].x;
-            const height = rect[2].y - rect[0].y;
-            var y1 = header.getBoundingClientRect().top;
-            var y2 = stroke.getBoundingClientRect().top;
+                const width = rect[1].x - rect[0].x;
+                const height = rect[2].y - rect[0].y;
+                var y1 = header.getBoundingClientRect().top;
+                var y2 = stroke.getBoundingClientRect().top;
 
-            var distance = y2 - y1;
+                var distance = y2 - y1;
 
-            const x = rect[0].x;
-            const y = rect[0].y - distance;
-            dialog.style.width = `${width}px`;
-            dialog.style.transform = `translate(${x}px, ${y}px)`;
-            stroke.style.height = `${height}px`;
+                console.log('distance', distance, y2, y1);
+                console.log('rect', rect);
+
+                const x = rect[0].x;
+                const y = rect[0].y - distance;
+                dialog.style.width = `${width}px`;
+                dialog.style.transform = `translate(${x}px, ${y}px)`;
+                stroke.style.height = `${height}px`;
         },
 
         clipPath: function(element = null, options = {}) {
@@ -57,7 +79,8 @@ export default function stepComponent({
         },
 
         findElement: function(name) {
-          return document.getElementById(`data.${name}`);
+          return document.querySelector(selector.replace(/\./g, '\\$&'))
+              ?? document.querySelector(selector);
         },
 
         elementPath: function (element = null, options = {}) {
@@ -89,7 +112,10 @@ export default function stepComponent({
         },
 
         elementRect: function (element = null, options = {}) {
+
             element = element || this.targetElement;
+            const bounds = element.getBoundingClientRect();
+            console.log('bounds', bounds.left, bounds.top);
             options = {
                 radius: 24,
                 margin: 10,
@@ -97,8 +123,8 @@ export default function stepComponent({
                 relative: false,
                 ...options
             }
-            const left = options.relative ? 0 : element.offsetLeft;
-            const top = options.relative ? 0 : element.offsetTop;
+            const left = options.relative ? 0 : bounds.left;
+            const top = options.relative ? 0 : bounds.top;
 
             let result = [
                 {
