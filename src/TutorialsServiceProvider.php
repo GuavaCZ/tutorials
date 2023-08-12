@@ -4,8 +4,6 @@ namespace Guava\Tutorials;
 
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Facades\FilamentAsset;
-use Guava\Tutorials\Livewire\Components\StepContainer;
-use Guava\Tutorials\View\Components\Tutorials;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 

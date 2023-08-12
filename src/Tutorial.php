@@ -4,7 +4,6 @@ namespace Guava\Tutorials;
 
 class Tutorial extends ComponentContainer
 {
-
     public function next(): void
     {
         $this->state('index', $this->getState('index') + 1);
@@ -15,7 +14,8 @@ class Tutorial extends ComponentContainer
         return $this->getState('index') + ($human ? 1 : 0);
     }
 
-    public function isLastStep() {
+    public function isLastStep(): bool
+    {
         return $this->getLivewire()->getIndex(true) === $this->getTotalSteps();
     }
 

@@ -13,26 +13,7 @@ class ComponentContainer extends ViewComponent
 {
     use Concerns\BelongsToLivewire;
     use Concerns\HasState;
-
-    //    use BelongsToModel;
-    //    use Concerns\BelongsToParentComponent;
-    //    use Concerns\CanBeDisabled;
-    //    use Concerns\CanBeHidden;
-    //    use Concerns\CanBeValidated;
-    //    use Concerns\Cloneable;
-    //    use Concerns\HasColumns;
     use Concerns\HasSteps;
-
-    //    use Concerns\HasFieldWrapper;
-    //    use Concerns\HasInlineLabels;
-    //    use Concerns\HasOperation;
-    //    use Concerns\HasState;
-    //    use Concerns\HasStateBindingModifiers;
-    //    use Concerns\ListensToEvents;
-    //    use Concerns\SupportsComponentFileAttachments;
-    //    use Concerns\SupportsFileUploadFields;
-    //    use Concerns\SupportsSelectFields;
-    //    use Concerns\CanBeTriggered;
     use Concerns\HasLifecycleEvents;
     use Concerns\CanBeCompleted;
 
@@ -66,7 +47,8 @@ class ComponentContainer extends ViewComponent
     }
 
     /**
-     * @return array<mixed>
+     * @param string $parameterName
+     * @return array
      */
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
     {
