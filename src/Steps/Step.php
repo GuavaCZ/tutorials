@@ -2,15 +2,16 @@
 
 namespace Guava\Tutorials\Steps;
 
-use Filament\Actions\Action;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Get;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasColor;
 use Guava\Tutorials\Concerns;
+use Guava\Tutorials\Filament\TutorialAction;
 use Guava\Tutorials\Selectors\FieldSelector;
 use Guava\Tutorials\Selectors\Selector;
+use Guava\Tutorials\Tutorial;
 
 class Step extends ViewComponent
 {
@@ -27,6 +28,7 @@ class Step extends ViewComponent
     use Concerns\HasDescription;
     use Concerns\CanBeInteracted;
     use Concerns\RequiresAction;
+    use Concerns\HasAction;
     use HasColor;
 
     //    use Concerns\CanSpanColumns;
@@ -62,9 +64,18 @@ class Step extends ViewComponent
 
     public function configure(): static
     {
-        $this->color = 'primary';
-
-        return $this;
+        return $this
+            ->color('primary')
+            ->hint(fn (Tutorial $tutorial, $livewire) => "{$livewire->getIndex(true)} / {$tutorial->getTotalSteps()}")
+            ->action(
+                //                TutorialAction::make("{$this->getKey()}_continue")
+                TutorialAction::make(uniqid())
+                    ->parentComponent($this)
+                    ->color($this->getColor())
+                    ->label(fn (Tutorial $tutorial) => $tutorial->isLastStep() ? 'Complete' : 'Next')
+                    ->action('nextTutorialStep()')
+            )
+        ;
     }
 
     //    public function getId(): string
@@ -75,31 +86,6 @@ class Step extends ViewComponent
     public function getKey(): string
     {
         return $this->getName();
-    }
-
-    protected bool $hiddenAction = false;
-
-    public function hiddenAction(bool $condition = true): static
-    {
-        $this->hiddenAction = $condition;
-
-        return $this;
-    }
-
-    public function isHiddenAction(): bool
-    {
-        return $this->evaluate($this->hiddenAction);
-    }
-
-    public function getContinueAction()
-    {
-
-        //        <button type="button" wire:click="setActiveStep('email')" class="pointer-events-auto">Test</button>
-        return Action::make('continue')
-            ->color($this->getColor())
-            ->label('Continue')
-            ->action('nextStep()')
-        ;
     }
 
     public function selector(Selector $selector): static
@@ -150,6 +136,7 @@ class Step extends ViewComponent
             'livewire' => [$this->getLivewire()],
             'step' => [$this],
             'get' => [$this->getGetCallback()],
+            'tutorial', 'container' => [$this->getContainer()],
             //            'model' => [$this->getModel()],
             //            'record' => [$this->getRecord()],
             //            'set' => [$this->getSetCallback()],

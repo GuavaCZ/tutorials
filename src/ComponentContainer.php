@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class ComponentContainer extends ViewComponent
 {
     use Concerns\BelongsToLivewire;
+    use Concerns\HasState;
 
     //    use BelongsToModel;
     //    use Concerns\BelongsToParentComponent;
@@ -31,7 +32,8 @@ class ComponentContainer extends ViewComponent
     //    use Concerns\SupportsComponentFileAttachments;
     //    use Concerns\SupportsFileUploadFields;
     //    use Concerns\SupportsSelectFields;
-    use Concerns\CanBeTriggered;
+    //    use Concerns\CanBeTriggered;
+    use Concerns\HasLifecycleEvents;
     use Concerns\CanBeCompleted;
 
     protected string $view = 'tutorials::component-container';
@@ -43,13 +45,14 @@ class ComponentContainer extends ViewComponent
     final public function __construct(HasTutorials $livewire)
     {
         $this->livewire($livewire);
+        //        $this->statePath = 'mountedTutorialData';
+        //        $this->state('index', 0);
     }
 
     public static function make(HasTutorials $livewire): static
     {
         return app(static::class, ['livewire' => $livewire]);
     }
-
 
     protected function getGetCallback(): callable
     {
@@ -70,8 +73,8 @@ class ComponentContainer extends ViewComponent
         return match ($parameterName) {
             'livewire' => [$this->getLivewire()],
             'get' => [$this->getGetCallback()],
-            //            'model' => [$this->getModel()],
-            //            'record' => [$this->getRecord()],
+            'model' => [$this->getLivewire()->getModel()],
+            'record' => [$this->getLivewire()->getRecord()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
     }
@@ -92,4 +95,5 @@ class ComponentContainer extends ViewComponent
     //            default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
     //        };
     //    }
+
 }

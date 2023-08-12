@@ -16,10 +16,6 @@ class TutorialsServiceProvider extends PackageServiceProvider
         $package
             ->name('tutorials')
             ->hasViews()
-            ->hasViewComponents('tutorials',
-                Tutorials::class,
-                StepContainer::class,
-            )
         ;
     }
 

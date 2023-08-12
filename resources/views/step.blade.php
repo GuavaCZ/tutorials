@@ -6,10 +6,10 @@
         ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('step', 'guava/tutorials') }}"
 
         x-data="stepComponent({
-        key: '{{$getKey()}}',
-        selector: '{{$getSelector()}}',
-        requiresAction: @js($isActionRequired()),
-    })"
+            key: '{{$getKey()}}',
+            selector: '{{$getSelector()}}',
+            requiresAction: @js($isActionRequired()),
+        })"
 
         class="absolute top-0 left-0"
 
@@ -17,6 +17,8 @@
             \Filament\Support\get_color_css_variables($getColor(), shades: [400, 500, 600]) => $getColor() !== 'gray',
         ])
 >
+    <div
+            x-bind:init="initialize()"></div>
     <div
             @class([
                 'absolute top-0 left-0 flex flex-col gap-2',
@@ -26,9 +28,9 @@
                 },
             ])
 
-            x-init="initializeDialog($el)"
+            x-bind:init="initializeDialog($el)"
     >
-        <div data-dialog-header class="flex flex-row justify-between whitespace-nowrap">
+        <div data-dialog-header class="absolute flex flex-row justify-between whitespace-nowrap top-0 left-0 w-full -translate-y-full">
             @if(! $isLabelHidden() && $label = $getLabel())
                 <span>{{ $label }}</span>
             @endif
@@ -54,7 +56,7 @@
                 <span>{{ $description }}</span>
             @endif
 
-            @if(! $isHiddenAction() && $action = $getContinueAction())
+            @if(! $isActionHidden() && $action = $getAction())
                 {{--            <button type="button" wire:click="setActiveS
                 tep('email')" class="pointer-events-auto">Test</button>--}}
                 <span class="ml-auto">{{$action}}</span>

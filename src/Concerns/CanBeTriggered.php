@@ -8,6 +8,7 @@ trait CanBeTriggered
 {
     protected bool | Closure $shouldTriggerWhen = false;
 
+
     public function trigger(bool | Closure $condition = true): static
     {
         return $this->shouldTriggerWhen($condition);
@@ -20,9 +21,15 @@ trait CanBeTriggered
         return $this;
     }
 
-
     public function isTriggered(): bool
     {
-        return $this->evaluate($this->shouldTriggerWhen);
+        $livewire = $this->getLivewire();
+        if ($cachedValue = data_get($livewire, 'mountedTutorialData.triggered') !== null) {
+            return $cachedValue;
+        }
+
+        $response = $this->evaluate($this->shouldTriggerWhen);
+        data_set($livewire, 'mountedTutorialData.triggered', $response);
+        return $response;
     }
 }

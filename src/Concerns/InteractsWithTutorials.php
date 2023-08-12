@@ -4,6 +4,7 @@ namespace Guava\Tutorials\Concerns;
 
 use Closure;
 use Exception;
+use Filament\Pages\Dashboard;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Resources\Pages\ListRecords;
@@ -13,6 +14,10 @@ use Guava\Tutorials\Tutorial;
 trait InteractsWithTutorials
 {
     use ResolvesDynamicLivewireProperties;
+    use InteractsWithTutorialActions;
+    use HandlesTutorialState;
+
+    protected array $tutorialData = [];
 
     /**
      * @var array<string, Tutorial>
@@ -147,7 +152,46 @@ trait InteractsWithTutorials
             $page instanceof CreateRecord => 'tutorials::filament.pages.create-record',
             $page instanceof EditRecord => 'tutorials::filament.pages.edit-record',
             $page instanceof ViewRecord => 'tutorials::filament.pages.view-record',
+            $page instanceof Dashboard => 'tutorials::filament.pages.dashboard',
             default => static::$view,
         };
     }
+
+    public array $mountedTutorialData = [
+        'index' => 0,
+    ];
+
+    public ?string $mountedTutorial = null;
+
+    public function getMountedTutorial(): ?Tutorial
+    {
+        if (! $this->mountedTutorial) {
+            return null;
+        }
+
+        return $this->getTutorial($this->mountedTutorial);
+    }
+
+    public function mountTutorial(string $name = 'tutorial'): void
+    {
+        $this->mountedTutorial = $name;
+        if ($this->mountedTutorial === 'advanced') {
+        }
+        $this->getMountedTutorial()->callAfterMount();
+    }
+
+    public function unmountTutorial(): void
+    {
+        $this->getMountedTutorial()->callBeforeUnmount();
+        $this->mountedTutorial = null;
+    }
+
+    //    public function mount(): void
+    //    {
+    //        if (method_exists(get_parent_class($this), 'mount')) {
+    //            parent::mount();
+    //        }
+    //
+    //        $this->totalSteps = $this->getTutorial('tutorial')->getTotalSteps();
+    //    }
 }

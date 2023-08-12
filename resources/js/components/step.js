@@ -10,7 +10,8 @@ export default function stepComponent({
         targetElement: null,
         // You can define any other Alpine.js properties here.
 
-        init: function () {
+        initialize: function () {
+            console.log('initialize');
             this.targetElement = this.findElement(key);
             console.log('requiresAction', requiresAction);
 
@@ -18,7 +19,7 @@ export default function stepComponent({
                 this.targetElement.addEventListener('click', (event) => {
                     // event.stopPropagation();
                     event.preventDefault();
-                    console.log('$wire', this.$wire.nextStep());
+                    console.log('$wire', this.$wire.nextTutorialStep());
 
                     this.targetElement.blur();
                     const descendants = this.targetElement.querySelectorAll(":hover");
@@ -33,22 +34,23 @@ export default function stepComponent({
         // You can define any other Alpine.js functions here.
 
         initializeDialog: function (dialog) {
+            console.log('initializeDialog');
                 const rect = this.elementRect();
-                const header = dialog.querySelector('[data-dialog-header]');
+                // const header = dialog.querySelector('[data-dialog-header]');
                 const stroke = dialog.querySelector('[data-dialog-stroke]');
 
                 const width = rect[1].x - rect[0].x;
                 const height = rect[2].y - rect[0].y;
-                var y1 = header.getBoundingClientRect().top;
-                var y2 = stroke.getBoundingClientRect().top;
+                // var y1 = header.getBoundingClientRect().top;
+                // var y2 = stroke.getBoundingClientRect().top;
 
-                var distance = y2 - y1;
+                // var distance = y2 - y1;
 
-                console.log('distance', distance, y2, y1);
+                // console.log('distance', distance, y2, y1);
                 console.log('rect', rect);
 
                 const x = rect[0].x;
-                const y = rect[0].y - distance;
+                const y = rect[0].y;
                 dialog.style.width = `${width}px`;
                 dialog.style.transform = `translate(${x}px, ${y}px)`;
                 stroke.style.height = `${height}px`;

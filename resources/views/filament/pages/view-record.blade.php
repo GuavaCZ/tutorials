@@ -41,5 +41,8 @@
             @endif
         </x-filament-panels::resources.relation-managers>
     @endif
-    {{ $this->getTutorial('tutorial') }}
+
+    @foreach($this->getCachedTutorials() as $tutorial)
+        {{ $tutorial }}
+    @endforeach
 </x-filament-panels::page>

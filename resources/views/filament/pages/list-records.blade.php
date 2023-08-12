@@ -36,5 +36,8 @@
 
         {{ \Filament\Support\Facades\FilamentView::renderHook('panels::resource.pages.list-records.table.after', scopes: $this->getRenderHookScopes()) }}
     </div>
-    {{ $this->getTutorial('tutorial') }}
+
+    @foreach($this->getCachedTutorials() as $tutorial)
+        {{ $tutorial }}
+    @endforeach
 </x-filament-panels::page>

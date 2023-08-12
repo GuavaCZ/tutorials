@@ -16,5 +16,8 @@
         />
 
     </x-filament-panels::form>
-        {{ $this->getTutorial('tutorial') }}
+
+    @foreach($this->getCachedTutorials() as $tutorial)
+        {{ $tutorial }}
+    @endforeach
 </x-filament-panels::page>
