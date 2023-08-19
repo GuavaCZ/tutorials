@@ -5,6 +5,7 @@
 @if($mountedTutorial === $container)
     <div>
         <div
+                id="something"
                 x-ignore
                 ax-load
                 ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('tutorial', 'guava/tutorials') }}"
@@ -24,7 +25,7 @@
         >
             @foreach($getSteps() as $step)
 
-                <div wire:key="tutorial-step-{{$step->getKey()}}">
+                <div wire:key="tutorial-step-{{$step->getKey()}}-{{uniqid()}}">
                     @if($loop->index === $this->getIndex())
                         @if(! $step->isInteractive())
                             @php

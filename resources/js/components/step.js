@@ -2,61 +2,97 @@
 // import Mousetrap from 'mousetrap';
 
 export default function stepComponent({
-    key,
-    selector,
-    requiresAction,
+                                          key,
+                                          selector,
+                                          requiresAction,
                                       }) {
     return {
         targetElement: null,
         // You can define any other Alpine.js properties here.
 
         initialize: function () {
-            console.log('initialize');
             this.targetElement = this.findElement(key);
-            console.log('requiresAction', requiresAction);
+            setTimeout(() => {
+                console.log('initialize');
+                console.log('this.$el', this.$el);
+                const dialog = this.$root.querySelector('[data-dialog]');
+                console.log('dialogos', dialog);
+                const clipPath = this.$root.querySelector('[data-clip-path]');
+                console.log('clipPath', clipPath);
+                console.log('requiresAction', requiresAction);
 
-            if (requiresAction) {
-                this.targetElement.addEventListener('click', (event) => {
-                    // event.stopPropagation();
-                    event.preventDefault();
-                    console.log('$wire', this.$wire.nextTutorialStep());
+                if (requiresAction) {
+                    this.targetElement.addEventListener('click', (event) => {
+                        // event.stopPropagation();
+                        event.preventDefault();
+                        console.log('$wire', this.$wire.nextTutorialStep());
 
-                    this.targetElement.blur();
-                    const descendants = this.targetElement.querySelectorAll(":hover");
+                        this.targetElement.blur();
+                        const descendants = this.targetElement.querySelectorAll(":hover");
 
-                    for (let i = 0; i < descendants.length; i++) {
-                        const descendant = descendants[i];
-                        descendant.blur();
-                    }
-                });
-            }
+                        for (let i = 0; i < descendants.length; i++) {
+                            const descendant = descendants[i];
+                            descendant.blur();
+                        }
+                    });
+                }
+
+                this.initializeDialog();
+                // clipPath.setAttribute('d', this.clipPath());
+
+            }, 1);
         },
         // You can define any other Alpine.js functions here.
 
-        initializeDialog: function (dialog) {
+        initializeDialog: function (dialog = null) {
+            if (!dialog) {
+                dialog = this.$root.querySelector('[data-dialog]');
+            }
+            const dialogPath = dialog.querySelector('[data-dialog-path]');
+
             console.log('initializeDialog');
-                const rect = this.elementRect();
-                // const header = dialog.querySelector('[data-dialog-header]');
-                const stroke = dialog.querySelector('[data-dialog-stroke]');
+            const rect = this.elementRect();
+            // const header = dialog.querySelector('[data-dialog-header]');
+            const stroke = dialog.querySelector('[data-dialog-stroke]');
 
-                const width = rect[1].x - rect[0].x;
-                const height = rect[2].y - rect[0].y;
-                // var y1 = header.getBoundingClientRect().top;
-                // var y2 = stroke.getBoundingClientRect().top;
+            const width = rect[1].x - rect[0].x;
+            const height = rect[2].y - rect[0].y;
+            console.log('IMPORTANT HERE');
+            console.log('width', width);
+            console.log('height', height);
+            // var y1 = header.getBoundingClientRect().top;
+            // var y2 = stroke.getBoundingClientRect().top;
 
-                // var distance = y2 - y1;
+            // var distance = y2 - y1;
 
-                // console.log('distance', distance, y2, y1);
-                console.log('rect', rect);
+            // console.log('distance', distance, y2, y1);
+            console.log('rect', rect);
 
-                const x = rect[0].x;
-                const y = rect[0].y;
-                dialog.style.width = `${width}px`;
-                dialog.style.transform = `translate(${x}px, ${y}px)`;
-                stroke.style.height = `${height}px`;
+            const x = rect[0].x;
+            const y = rect[0].y;
+            console.log('x', x);
+            console.log('y', y);
+            console.log('dialog', dialog);
+            // dialog = this.$root.querySelector('[data-dialog]');
+            dialog.style.width = `${width}px`;
+            dialog.style.transform = `translate(${x}px, ${y}px)`;
+            // console.log('Delayed dialog', dialog);
+
+            // document.querySelectorAll('[data-dialog]').forEach((dialog) => {
+            //    dialog.remove();
+            // });
+            // console.log('self.$root', self.$root);
+            // self.$root.appendChild(dialog);
+            // console.log(document.getElementById('something'));
+            // document.getElementById('something').appendChild(dialog);
+            // document.body.appendChild(dialog);
+            // }, 1000);
+            stroke.style.height = `${height}px`;
+
+            dialogPath.setAttribute('d', this.elementPath(null, {relative: true, positive: true}))
         },
 
-        clipPath: function(element = null, options = {}) {
+        clipPath: function (element = null, options = {}) {
             element = element || this.targetElement;
             options = {
                 radius: 24,
@@ -80,9 +116,9 @@ export default function stepComponent({
             return path.trim();
         },
 
-        findElement: function(name) {
-          return document.querySelector(selector.replace(/\./g, '\\$&'))
-              ?? document.querySelector(selector);
+        findElement: function (name) {
+            return document.querySelector(selector.replace(/\./g, '\\$&'))
+                ?? document.querySelector(selector);
         },
 
         elementPath: function (element = null, options = {}) {
@@ -99,16 +135,16 @@ export default function stepComponent({
             });
 
             let path = '';
-            path += 'M ' + rect[0].x + ' ' + (rect[0].y +  options.radius) + ' ';
-            path += 'C ' + rect[0].x + ' ' + rect[0].y + ' ' + rect[0].x + ' ' + rect[0].y + ' ' + (rect[0].x +  options.radius) + ' ' + rect[0].y + ' ';
-            path += 'L ' + (rect[1].x -  options.radius) + ' ' + rect[1].y + ' ';
-            path += 'C ' + rect[1].x + ' ' + rect[1].y + ' ' + rect[1].x + ' ' + rect[1].y + ' ' + rect[1].x + ' ' + (rect[1].y +  options.radius) + ' ';
-            path += 'L ' + rect[2].x + ' ' + (rect[2].y -  options.radius) + ' ';
-            path += 'C ' + rect[2].x + ' ' + rect[2].y + ' ' + rect[2].x + ' ' + rect[2].y + ' ' + (rect[2].x -  options.radius) + ' ' + rect[2].y + ' ';
-            path += 'L ' + (rect[3].x +  options.radius) + ' ' + rect[3].y + ' ';
-            path += 'C ' + rect[3].x + ' ' + rect[3].y + ' ' + rect[3].x + ' ' + rect[3].y + ' ' + rect[3].x + ' ' + (rect[3].y -  options.radius) + ' ';
+            path += 'M ' + rect[0].x + ' ' + (rect[0].y + options.radius) + ' ';
+            path += 'C ' + rect[0].x + ' ' + rect[0].y + ' ' + rect[0].x + ' ' + rect[0].y + ' ' + (rect[0].x + options.radius) + ' ' + rect[0].y + ' ';
+            path += 'L ' + (rect[1].x - options.radius) + ' ' + rect[1].y + ' ';
+            path += 'C ' + rect[1].x + ' ' + rect[1].y + ' ' + rect[1].x + ' ' + rect[1].y + ' ' + rect[1].x + ' ' + (rect[1].y + options.radius) + ' ';
+            path += 'L ' + rect[2].x + ' ' + (rect[2].y - options.radius) + ' ';
+            path += 'C ' + rect[2].x + ' ' + rect[2].y + ' ' + rect[2].x + ' ' + rect[2].y + ' ' + (rect[2].x - options.radius) + ' ' + rect[2].y + ' ';
+            path += 'L ' + (rect[3].x + options.radius) + ' ' + rect[3].y + ' ';
+            path += 'C ' + rect[3].x + ' ' + rect[3].y + ' ' + rect[3].x + ' ' + rect[3].y + ' ' + rect[3].x + ' ' + (rect[3].y - options.radius) + ' ';
             // path += 'Z';
-            path += 'L ' + rect[0].x + ' ' + (rect[0].y +  options.radius) + ' ';
+            path += 'L ' + rect[0].x + ' ' + (rect[0].y + options.radius) + ' ';
 
             return path.trim();
         },
