@@ -12,6 +12,17 @@ export default function tutorialComponent({
             console.log('Init tutorial');
             document.body.style.overflow = 'hidden';
 
+            // TODO:
+            const documentHeight = Math.max(
+                document.documentElement.clientHeight,
+                document.documentElement.scrollHeight,
+                document.documentElement.offsetHeight,
+            );
+
+            console.log('documentos heightos', documentHeight);
+            this.$el.style.height = documentHeight + 'px';
+
+            // TODO: call only height modifeir
             // window.addEventListener('scroll', () => {
             //     if (this.scrollTimeout) {
             //         clearTimeout(this.scrollTimeout);

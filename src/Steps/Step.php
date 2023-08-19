@@ -70,8 +70,13 @@ class Step extends ViewComponent
             ->action(
                 //                TutorialAction::make("{$this->getKey()}_continue")
                 TutorialAction::make(uniqid())
+//                    ->icon('heroicon-o-user')
                     ->parentComponent($this)
+//                    ->disabled()
+//                    ->hidden()
+                    ->disabled(fn ($get) => empty($get('name')))
                     ->color($this->getColor())
+//                    ->label(fn($get) => $get('name'))
                     ->label(fn (Tutorial $tutorial) => $tutorial->isLastStep() ? 'Complete' : 'Next')
                     ->action('nextTutorialStep()')
             )
@@ -114,7 +119,7 @@ class Step extends ViewComponent
         return $static;
     }
 
-    protected function getGetCallback(): callable
+    public function getGetCallback(): callable
     {
         $component = new Component();
         /** @var HasForms $livewire */

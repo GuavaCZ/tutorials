@@ -49,7 +49,6 @@
         <svg data-dialog-stroke class="w-full h-auto fill-none overflow-visible">
             <path
                     data-dialog-path
-                    {{--                    x-on:DOMContentLoaded.document="console.log('DOM LOADED');$el.setAttribute('d', elementPath(null, {relative: true, positive: true}))"--}}
                     @class([
                         'stroke-2',
                         match ($getColor()) {
