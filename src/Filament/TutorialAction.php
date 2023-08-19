@@ -5,7 +5,6 @@ namespace Guava\Tutorials\Filament;
 use Closure;
 use Filament\Actions\StaticAction;
 use Guava\Tutorials\Concerns\BelongsToParentComponent;
-use Illuminate\Support\Js;
 
 class TutorialAction extends StaticAction
 {
@@ -28,45 +27,12 @@ class TutorialAction extends StaticAction
         return parent::action($action);
     }
 
-    //    public function getLivewireClickHandler(): ?string
-    //    {
-    //        if ($parent = parent::getLivewireClickHandler()) {
-    //            return $parent;
-    //        }
-
-    //        $argumentsParameter = '';
-    //
-    //        if (count($arguments = $this->getArguments())) {
-    //            $argumentsParameter .= ', ';
-    //            $argumentsParameter .= Js::from($arguments);
-    //        }
-    //
-    //        return "mountTutorialAction('{$this->getName()}'{$argumentsParameter})";
-    //    }
-
-    //    public function getLivewireClickHandler(): ?string
-    //    {
-    //        if (! $this->isLivewireClickHandlerEnabled()) {
-    //            return null;
-    //        }
-    //
-    //        if (is_string($this->action)) {
-    //            return $this->action;
-    //        }
-    //
-    //        $argumentsParameter = '';
-    //
-    //        if (count($arguments = $this->getArguments())) {
-    //            $argumentsParameter .= ', ';
-    //            $argumentsParameter .= Js::from($arguments);
-    //        }
-    //
-    //        return "mountTutorialAction('{$this->getName()}'{$argumentsParameter})";
-    //    }
-
-    public function getLivewireTarget(): ?string
+    public function getExtraAttributes(): array
     {
-        return null;
+        return [
+            ...$this->extraAttributes,
+            'wire:loading.attr' => 'disabled-fix',
+        ];
     }
 
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
@@ -81,13 +47,5 @@ class TutorialAction extends StaticAction
             //            'record' => [$this->getRecord()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
-    }
-
-    public function getExtraAttributes(): array
-    {
-        return [
-            ...$this->extraAttributes,
-            'wire:loading.attr' => 'disabled-fix',
-        ];
     }
 }
