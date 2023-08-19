@@ -71,7 +71,8 @@ trait InteractsWithTutorials
                     throw new Exception("Tutorial configuration method [{$tutorialName}()] is missing from Livewire component [{$livewireClass}].");
                 }
 
-                return [$tutorial => $this->{$tutorial}($this->makeTutorial())];
+                //                return [$tutorial => $this->{$tutorial}($this->makeTutorial())];
+                return [$tutorial => $this->{$tutorial}($this->makeTutorial()->name($tutorial))];
             })
             ->forget('')
             ->all()
@@ -138,9 +139,13 @@ trait InteractsWithTutorials
         return $this->isCachingTutorials;
     }
 
-    public function boot(): void
+    public function bootInteractsWithTutorials(): void
     {
         static::$view = static::getView();
+        $this->listeners = [
+            ...$this->listeners,
+            'mountTutorial',
+        ];
     }
 
     public static function getView(): string
@@ -194,4 +199,11 @@ trait InteractsWithTutorials
     //
     //        $this->totalSteps = $this->getTutorial('tutorial')->getTotalSteps();
     //    }
+
+    protected function getListeners()
+    {
+        return [
+            'mountTutorial',
+        ];
+    }
 }

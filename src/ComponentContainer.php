@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ComponentContainer extends ViewComponent
 {
+    use Concerns\HasName;
+    use Concerns\HasLabel;
     use Concerns\BelongsToLivewire;
     use Concerns\HasState;
     use Concerns\HasSteps;
