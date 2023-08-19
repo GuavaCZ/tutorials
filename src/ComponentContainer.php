@@ -14,7 +14,7 @@ class ComponentContainer extends ViewComponent
     use Concerns\HasName;
     use Concerns\HasLabel;
     use Concerns\BelongsToLivewire;
-    use Concerns\HasState;
+//    use Concerns\HasState;
     use Concerns\HasSteps;
     use Concerns\HasLifecycleEvents;
     use Concerns\CanBeCompleted;

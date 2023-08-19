@@ -65,11 +65,9 @@
                 />
             @endif
 
-            @if(! $isActionHidden() && $action = $getAction())
-                {{--            <button type="button" wire:click="setActiveS
-                tep('email')" class="pointer-events-auto">Test</button>--}}
-                <span class="ml-auto">{{$action}}</span>
-            @endif
+            <x-tutorials::step.actions
+                    :actions="$getActions()"
+            />
         </div>
     </div>
 
@@ -79,7 +77,7 @@
                 {{--                <circle r="50" cx="50" cy="50"/>--}}
                 <path
                         data-clip-path
-{{--                        x-bind:d="clipPath()"--}}
+                        {{--                        x-bind:d="clipPath()"--}}
                 />
             </clipPath>
 

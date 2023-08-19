@@ -28,7 +28,7 @@ class Step extends ViewComponent
     use Concerns\HasDescription;
     use Concerns\CanBeInteracted;
     use Concerns\RequiresAction;
-    use Concerns\HasAction;
+    use Concerns\HasActions;
     use HasColor;
 
     //    use Concerns\CanSpanColumns;
@@ -67,18 +67,20 @@ class Step extends ViewComponent
         return $this
             ->color('primary')
             ->hint(fn (Tutorial $tutorial, $livewire) => "{$livewire->getIndex(true)} / {$tutorial->getTotalSteps()}")
-            ->action(
-                //                TutorialAction::make("{$this->getKey()}_continue")
-                TutorialAction::make(uniqid())
+            ->actions(
+                [
+                    //                TutorialAction::make("{$this->getKey()}_continue")
+                    TutorialAction::make(uniqid())
 //                    ->icon('heroicon-o-user')
-                    ->parentComponent($this)
+                        ->parentComponent($this)
 //                    ->disabled()
 //                    ->hidden()
-                    ->disabled(fn ($get) => empty($get('name')))
-                    ->color($this->getColor())
+                        ->disabled(fn ($get) => empty($get('name')))
+                        ->color($this->getColor())
 //                    ->label(fn($get) => $get('name'))
-                    ->label(fn (Tutorial $tutorial) => $tutorial->isLastStep() ? 'Complete' : 'Next')
-                    ->action('nextTutorialStep()')
+                        ->label(fn (Tutorial $tutorial) => $tutorial->isLastStep() ? 'Complete' : 'Next')
+                        ->action('nextTutorialStep()'),
+                ]
             )
         ;
     }
