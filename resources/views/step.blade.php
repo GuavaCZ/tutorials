@@ -49,7 +49,6 @@
         <svg data-dialog-stroke class="w-full h-auto fill-none overflow-visible">
             <path
                     data-dialog-path
-                    {{--                    x-on:DOMContentLoaded.document="console.log('DOM LOADED');$el.setAttribute('d', elementPath(null, {relative: true, positive: true}))"--}}
                     @class([
                         'stroke-2',
                         match ($getColor()) {
@@ -80,7 +79,7 @@
                 {{--                <circle r="50" cx="50" cy="50"/>--}}
                 <path
                         data-clip-path
-                        x-bind:d="clipPath()"
+{{--                        x-bind:d="clipPath()"--}}
                 />
             </clipPath>
 

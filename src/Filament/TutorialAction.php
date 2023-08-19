@@ -64,6 +64,11 @@ class TutorialAction extends StaticAction
     //        return "mountTutorialAction('{$this->getName()}'{$argumentsParameter})";
     //    }
 
+    public function getLivewireTarget(): ?string
+    {
+        return null;
+    }
+
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
     {
         //        dd('livewire', $this->getLivewire());
@@ -71,9 +76,18 @@ class TutorialAction extends StaticAction
             'livewire' => [$this->getLivewire()],
             'tutorial' => [$this->getParentComponent()->getContainer()],
             'step' => [$this->getParentComponent()],
+            'get' => [$this->getParentComponent()->getGetCallback()],
             //            'model' => [$this->getModel()],
             //            'record' => [$this->getRecord()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
+    }
+
+    public function getExtraAttributes(): array
+    {
+        return [
+            ...$this->extraAttributes,
+            'wire:loading.attr' => 'disabled-fix',
+        ];
     }
 }

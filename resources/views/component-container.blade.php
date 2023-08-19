@@ -15,7 +15,7 @@
                 })"
 
                 @class([
-                    'fixed top-0 left-0 w-screen h-screen z-40',
+                    'absolute top-0 left-0 w-screen h-screen z-40',
                     'bg-black/80',
                     '[clip-path:url(#stepClipPath)]',
                     'dark:bg-gray-800/80',

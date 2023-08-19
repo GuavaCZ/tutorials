@@ -8,9 +8,19 @@ export default function stepComponent({
                                       }) {
     return {
         targetElement: null,
+        scrollTimeout: null,
         // You can define any other Alpine.js properties here.
 
         initialize: function () {
+            // window.addEventListener('scroll', () => {
+            //     if (this.scrollTimeout) {
+            //         clearTimeout(this.scrollTimeout);
+            //     }
+            //
+            //     this.scrollTimeout = setTimeout(() => {
+            //         this.initialize();
+            //     }, 100);
+            // });
             this.targetElement = this.findElement(key);
             setTimeout(() => {
                 console.log('initialize');
@@ -38,7 +48,7 @@ export default function stepComponent({
                 }
 
                 this.initializeDialog();
-                // clipPath.setAttribute('d', this.clipPath());
+                clipPath.setAttribute('d', this.clipPath());
 
             }, 1);
         },
@@ -54,6 +64,12 @@ export default function stepComponent({
             const rect = this.elementRect();
             // const header = dialog.querySelector('[data-dialog-header]');
             const stroke = dialog.querySelector('[data-dialog-stroke]');
+
+            window.scrollTo({
+                top: rect[0].y - (window.innerHeight/3),
+                left: rect[0].x,
+                behavior: 'smooth'
+            });
 
             const width = rect[1].x - rect[0].x;
             const height = rect[2].y - rect[0].y;
@@ -105,11 +121,17 @@ export default function stepComponent({
         },
 
         windowPath: function () {
+            const documentHeight = Math.max(
+                document.documentElement.clientHeight,
+                document.documentElement.scrollHeight,
+                document.documentElement.offsetHeight,
+            );
+
             // TODO: add option to select clockwise /counter clockwise
             //M 0 8 C 0 0 0 0 8 0 L 38 0 C 46 0 46 0 46 8 C 46 16 46 16 38 16 L 8 16 C 0 16 0 16 0 8
             let path = 'M 0 0 ';
-            path += 'L 0 ' + window.innerHeight + ' ';
-            path += 'L ' + window.innerWidth + ' ' + window.innerHeight + ' ';
+            path += 'L 0 ' + documentHeight + ' ';
+            path += 'L ' + window.innerWidth + ' ' + documentHeight + ' ';
             path += 'L ' + window.innerWidth + ' 0 ';
             path += 'L 0 0 ';
 
@@ -154,6 +176,7 @@ export default function stepComponent({
             element = element || this.targetElement;
             const bounds = element.getBoundingClientRect();
             console.log('bounds', bounds.left, bounds.top);
+            console.log('offset', element.offsetLeft, element.offsetTop);
             options = {
                 radius: 24,
                 margin: 10,
@@ -161,8 +184,9 @@ export default function stepComponent({
                 relative: false,
                 ...options
             }
-            const left = options.relative ? 0 : bounds.left;
-            const top = options.relative ? 0 : bounds.top;
+            const left = options.relative ? 0 : element.offsetLeft;
+            const top = options.relative ? 0 : element.offsetTop;
+            console.log('left/top', left, top);
 
             let result = [
                 {
