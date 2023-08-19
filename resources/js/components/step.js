@@ -8,9 +8,19 @@ export default function stepComponent({
                                       }) {
     return {
         targetElement: null,
+        scrollTimeout: null,
         // You can define any other Alpine.js properties here.
 
         initialize: function () {
+            // window.addEventListener('scroll', () => {
+            //     if (this.scrollTimeout) {
+            //         clearTimeout(this.scrollTimeout);
+            //     }
+            //
+            //     this.scrollTimeout = setTimeout(() => {
+            //         this.initialize();
+            //     }, 100);
+            // });
             this.targetElement = this.findElement(key);
             setTimeout(() => {
                 console.log('initialize');
@@ -38,7 +48,7 @@ export default function stepComponent({
                 }
 
                 this.initializeDialog();
-                // clipPath.setAttribute('d', this.clipPath());
+                clipPath.setAttribute('d', this.clipPath());
 
             }, 1);
         },
