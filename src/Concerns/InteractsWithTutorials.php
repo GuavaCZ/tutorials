@@ -191,15 +191,6 @@ trait InteractsWithTutorials
         $this->mountedTutorial = null;
     }
 
-    //    public function mount(): void
-    //    {
-    //        if (method_exists(get_parent_class($this), 'mount')) {
-    //            parent::mount();
-    //        }
-    //
-    //        $this->totalSteps = $this->getTutorial('tutorial')->getTotalSteps();
-    //    }
-
     protected function getListeners()
     {
         return [
