@@ -53,8 +53,8 @@ export default function stepComponent({
             this.initializeDialog();
 
             this.$nextTick(() => {
-            clipPath.setAttribute('d', this.clipPath());
-            this.$dispatch('tutorial::render');
+                clipPath.setAttribute('d', this.clipPath());
+                this.$dispatch('tutorial::render');
             });
 
             clipPath.setAttribute('d', this.clipPath());
@@ -92,14 +92,14 @@ export default function stepComponent({
                         // if (height != this.timeouts['trix-height']) {
                         //     this.timeouts['trix-height'] = height;
 
-                            if (this.timeouts['trix']) {
-                                clearTimeout(this.timeouts['trix']);
-                            }
+                        if (this.timeouts['trix']) {
+                            clearTimeout(this.timeouts['trix']);
+                        }
 
-                            this.timeouts['trix'] = setTimeout(() => {
-                                this.timeouts['trix'] = null;
-                                this.initialize();
-                            }, 500);
+                        this.timeouts['trix'] = setTimeout(() => {
+                            this.timeouts['trix'] = null;
+                            this.initialize();
+                        }, 500);
                         // }
 
                         //     if (mutation.type === 'attributes') {
