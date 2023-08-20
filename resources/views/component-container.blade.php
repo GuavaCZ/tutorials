@@ -23,6 +23,7 @@
 
                 x-on:click.prevent.stop
         >
+            <div x-bind:init="initialize()"></div>
             @foreach($getSteps() as $step)
 
                 <div wire:key="tutorial-step-{{$step->getKey()}}-{{uniqid()}}">

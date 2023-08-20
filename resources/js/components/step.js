@@ -51,10 +51,11 @@ export default function stepComponent({
             }
 
             this.initializeDialog();
-            setTimeout(() => {
 
+            this.$nextTick(() => {
             clipPath.setAttribute('d', this.clipPath());
-            }, 4);
+            this.$dispatch('tutorial::render');
+            });
 
             clipPath.setAttribute('d', this.clipPath());
             // }, 1);

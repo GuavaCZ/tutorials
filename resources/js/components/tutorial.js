@@ -9,7 +9,11 @@ export default function tutorialComponent({
         scrollTimeout: null,
         documentHeight: 0,
 
-        init: function () {
+        initialize: function () {
+            window.addEventListener('tutorial::render', () => {
+                this.documentHeight = document.documentElement.getBoundingClientRect().height;
+                this.$root.style.height = this.documentHeight + 'px';
+            });
             this.tutorial = this;
             console.log('Init tutorial');
             // document.body.style.overflow = 'hidden';
@@ -18,16 +22,18 @@ export default function tutorialComponent({
             this.documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight,
                 document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
 
-            setTimeout(() => {
-                this.documentHeight = document.documentElement.getBoundingClientRect().height;
-
-                console.log('delay height', this.documentHeight);
-
-                this.$el.style.height = this.documentHeight + 'px';
-            }, 1);
+            // setTimeout(() => {
+            this.$nextTick(() => {
+                this.$dispatch('tutorial::render');
+                // this.documentHeight = document.documentElement.getBoundingClientRect().height;
+                //
+                // console.log('delay height', this.documentHeight);
+                //
+                // this.$root.style.height = this.documentHeight + 'px';
+            });
 
             console.log('height', this.documentHeight);
-            this.$el.style.height = this.documentHeight + 'px';
+            // this.$root.style.height = this.documentHeight + 'px';
 
             // TODO: call only height modifeir
             // window.addEventListener('scroll', () => {
@@ -45,11 +51,11 @@ export default function tutorialComponent({
         },
 
         scrollStart: function () {
-            this.$el.classList.add('hidden');
+            this.$root.classList.add('hidden');
         },
 
         scrollEnd: function () {
-            this.$el.classList.remove('hidden');
+            this.$root.classList.remove('hidden');
         }
         // You can define any other Alpine.js functions here.
     }
