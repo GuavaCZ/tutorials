@@ -40,7 +40,6 @@ class FieldSelector extends Selector
 
     public static function fromLivewire($value): static
     {
-//        $selector = Arr::get($value, 'selector');
         $class = Arr::pull($value, 'class');
 
         return app($class, $value);

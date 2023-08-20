@@ -6,7 +6,7 @@ trait HandlesTutorialState
 {
     public int $index = 0;
 
-    public function nextTutorialStep()
+    public function nextTutorialStep(): void
     {
         $this->index++;
 
@@ -15,10 +15,24 @@ trait HandlesTutorialState
         }
     }
 
-    public function completeTutorial()
+    public function previousTutorialStep(): void
+    {
+        $this->index = max(0, --$this->index);
+    }
+
+    public function completeTutorial(): void
     {
         $this->index = 0;
 
+        $this->getMountedTutorial()->callAfterCompleted();
+        $this->unmountTutorial();
+    }
+
+    public function skipTutorial(): void
+    {
+        $this->index = 0;
+
+        $this->getMountedTutorial()->callAfterSkipped();
         $this->unmountTutorial();
     }
 
@@ -31,5 +45,4 @@ trait HandlesTutorialState
     {
         return $this->getMountedTutorial()->getTotalSteps();
     }
-
 }

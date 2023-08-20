@@ -5,7 +5,7 @@ namespace Guava\Tutorials\Steps;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasColor;
 use Guava\Tutorials\Concerns;
-use Guava\Tutorials\Filament\TutorialAction;
+use Guava\Tutorials\Contracts\HasTutorials;
 use Guava\Tutorials\Selectors\FieldSelector;
 use Guava\Tutorials\Selectors\Selector;
 use Guava\Tutorials\Tutorial;
@@ -38,8 +38,6 @@ class Step extends ViewComponent
 
     protected Selector $selector;
 
-    protected ?TutorialAction $nextStepAction = null;
-
     final public function __construct(string $name, Selector $selector)
     {
         $this->name($name);
@@ -51,7 +49,6 @@ class Step extends ViewComponent
     public function configure(): static
     {
         return $this
-            ->color('primary')
             ->hint(
                 fn (Tutorial $tutorial, $livewire) => trans_choice(
                     'tutorials::step.hint',
@@ -62,40 +59,6 @@ class Step extends ViewComponent
                     ]
                 )
             )
-            ->actions(
-                [
-                    $this->getNextStepAction(),
-                ]
-            )
-        ;
-    }
-
-    public function nextStepAction(TutorialAction | \Closure $action): static
-    {
-        $this->nextStepAction = $action;
-
-        return $this;
-    }
-
-    public function getNextStepAction(): TutorialAction
-    {
-        return $this->evaluate($this->nextStepAction, [
-            'action' => $this->getDefaultNextStepAction(),
-        ]) ?? $this->getDefaultNextStepAction();
-    }
-
-    protected function getDefaultNextStepAction(): TutorialAction
-    {
-        return TutorialAction::make(uniqid())
-            ->icon(fn (Tutorial $tutorial) => $tutorial->isLastStep()
-                ? 'heroicon-o-check-circle'
-                : 'heroicon-o-arrow-right-circle')
-            ->parentComponent($this)
-//            ->disabled(fn (callable $get, Step $step) => ! $get($step->getName()) && empty($get($step->getName())))
-            ->color($this->getColor())
-            ->label(fn (Tutorial $tutorial) => $tutorial->isLastStep()
-                ? __('tutorials::step.complete') : __('tutorials::step.next'))
-            ->action('nextTutorialStep()')
         ;
     }
 
@@ -136,6 +99,7 @@ class Step extends ViewComponent
             'model' => [$this->getLivewire()->getModel()],
             'record' => [$this->getLivewire()->getRecord()],
             'get' => [$this->getGetCallback()],
+            'component' => [$this->getFormComponent()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
     }

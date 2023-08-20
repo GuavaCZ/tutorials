@@ -19,6 +19,10 @@
                     'dark:bg-gray-800/80',
                 ])
 
+                @style([
+                    \Filament\Support\get_color_css_variables($getColor(), shades: [400, 500, 600]) => $getColor() !== 'gray',
+                ])
+
                 x-on:click.prevent.stop
         >
             @foreach($getSteps() as $step)

@@ -2,26 +2,25 @@
 
 namespace Guava\Tutorials;
 
-use Filament\Forms\Components\Component;
-use Filament\Forms\Concerns\HasOperation;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Get;
 use Filament\Support\Components\ViewComponent;
+use Filament\Support\Concerns\HasColor;
 use Guava\Tutorials\Contracts\HasTutorials;
+use Guava\Tutorials\Filament\Actions\CompleteTutorialAction;
+use Guava\Tutorials\Filament\Actions\NextStepAction;
+use Guava\Tutorials\Filament\Actions\PreviousStepAction;
+use Guava\Tutorials\Filament\Actions\SkipTutorialAction;
 use Illuminate\Database\Eloquent\Model;
 
 class ComponentContainer extends ViewComponent
 {
+    use Concerns\BelongsToLivewire;
+    use Concerns\HasLifecycleEvents;
+    use Concerns\CanHaveFormCallbacks;
     use Concerns\HasName;
     use Concerns\HasLabel;
-    use Concerns\BelongsToLivewire;
-
-    //    use Concerns\HasState;
     use Concerns\HasSteps;
-    use Concerns\HasLifecycleEvents;
-    use Concerns\CanBeCompleted;
-    use Concerns\CanHaveFormCallbacks;
-    use HasOperation;
+    use Concerns\HasActions;
+    use HasColor;
 
     protected string $view = 'tutorials::component-container';
 
@@ -32,13 +31,26 @@ class ComponentContainer extends ViewComponent
     final public function __construct(HasTutorials $livewire)
     {
         $this->livewire($livewire);
-        //        $this->statePath = 'mountedTutorialData';
-        //        $this->state('index', 0);
+
+        $this->configure();
+    }
+
+    public function configure(): static
+    {
+        return $this
+            ->color('primary')
+            ->previousStepAction(PreviousStepAction::make())
+            ->nextStepAction(NextStepAction::make())
+            ->skipTutorialAction(SkipTutorialAction::make())
+            ->completeTutorialAction(CompleteTutorialAction::make())
+        ;
     }
 
     public static function make(HasTutorials $livewire): static
     {
-        return app(static::class, ['livewire' => $livewire]);
+        return app(static::class, [
+            'livewire' => $livewire,
+        ]);
     }
 
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array

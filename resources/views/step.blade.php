@@ -14,18 +14,17 @@
         class="absolute top-0 left-0"
 
         @style([
-            \Filament\Support\get_color_css_variables($getColor(), shades: [400, 500, 600]) => $getColor() !== 'gray',
+            \Filament\Support\get_color_css_variables($getColor(), shades: [400, 500, 600, 950]) => $getColor() !== 'gray',
         ])
 
 >
-    <div x-bind:init="initialize()"></div>
     <div
             data-dialog
             @class([
                 'absolute top-0 left-0 flex flex-col gap-2',
                 match ($getColor()) {
-                    'gray' => 'text-gray-950 dark:text-white',
-                    default => 'text-custom-600 dark:text-custom-400',
+                    'gray' => 'text-gray-950',
+                    default => 'text-custom-400',
                 },
             ])
 
@@ -51,8 +50,8 @@
                     @class([
                         'stroke-[4px]',
                         match ($getColor()) {
-                            'gray' => 'stroke-gray-950 dark:text-white',
-                            default => 'stroke-custom-600 dark:stroke-custom-400',
+                            'gray' => 'stroke-gray-950',
+                            default => 'stroke-custom-400',
                         },
                     ])
             />
@@ -64,8 +63,14 @@
                 />
             @endif
 
+            @php
+                \Illuminate\Support\Facades\Log::info('actions', [
+                'actions' => $getActions(),
+            ]);
+            @endphp
             <x-tutorials::step.actions
                     :actions="$getActions()"
+                    :color="$getColor()"
             />
         </div>
     </div>

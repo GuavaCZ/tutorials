@@ -40,7 +40,7 @@
                     {{--                :href="$profileItemUrl ?? filament()->getProfileUrl()"--}}
                     {{--                icon-alias="panels::user-menu.profile-item"--}}
                     {{--                            x-on:click.prevent="$wire.mountTutorial('{{$tutorial->getName()}}')"--}}
-                    x-on:click.prevent="$dispatch('mountTutorial', { name: '{{ $tutorial->getName() }}' })"
+                    x-on:click.prevent="close();$dispatch('mountTutorial', { name: '{{ $tutorial->getName() }}' })"
                     {{--                    wire:click.prevent="mountTutorial('{{$tutorial->getName()}}')"--}}
                     tag="button"
             >

@@ -4,6 +4,7 @@ return [
 
     'next' => 'Pokračovat',
     'previous' => 'Zpět',
+    'skip' => 'Přeskočit návod',
 
     'complete' => 'Dokončit',
 

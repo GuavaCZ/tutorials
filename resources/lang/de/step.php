@@ -4,6 +4,7 @@ return [
 
     'next' => 'Weiter',
     'previous' => 'Züruck',
+    'skip' => 'Tutorial Überspringen',
 
     'complete' => 'Abschließen',
 

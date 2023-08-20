@@ -14,10 +14,11 @@ use Guava\Tutorials\Tutorial;
 trait InteractsWithTutorials
 {
     use ResolvesDynamicLivewireProperties;
-    use InteractsWithTutorialActions;
+
+    //    use InteractsWithTutorialActions;
     use HandlesTutorialState;
 
-    protected array $tutorialData = [];
+    //    protected array $tutorialData = [];
 
     /**
      * @var array<string, Tutorial>
@@ -142,6 +143,7 @@ trait InteractsWithTutorials
     public function bootInteractsWithTutorials(): void
     {
         static::$view = static::getView();
+
         $this->listeners = [
             ...$this->listeners,
             'mountTutorial',

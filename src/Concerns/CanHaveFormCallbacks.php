@@ -5,6 +5,7 @@ namespace Guava\Tutorials\Concerns;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Get;
+use Guava\Tutorials\Selectors\FieldSelector;
 
 trait CanHaveFormCallbacks
 {
@@ -35,5 +36,30 @@ trait CanHaveFormCallbacks
         $component->container($form);
 
         return new Get($component);
+    }
+
+    public function getFormComponent(): ?Component
+    {
+        $livewire = $this->getLivewire();
+
+        if (! ($livewire instanceof HasForms)) {
+            return null;
+        }
+
+        if (! ($this->getSelector() instanceof FieldSelector)) {
+            return null;
+        }
+
+        $key = $this->getName();
+
+        $form = $livewire->getForm($this->getFormName());
+
+        return collect($form->getFlatComponents())->first(
+            fn (Component $component) => in_array($component->getStatePath(), [
+                $key,
+                "data.$key",
+                "{$this->getFormName()}.$key",
+            ]),
+        );
     }
 }

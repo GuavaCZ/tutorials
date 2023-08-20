@@ -6,7 +6,7 @@ export default function stepComponent({
     return {
         target: null,
 
-        initialize: function () {
+        init: function () {
             this.target = this.findElement(key);
 
             this.configure();
@@ -84,7 +84,7 @@ export default function stepComponent({
 
                         this.timeouts['trix'] = setTimeout(() => {
                             this.timeouts['trix'] = null;
-                            this.initialize();
+                            this.init();
                         }, 500);
                         // }
 
@@ -131,7 +131,7 @@ export default function stepComponent({
 
                         this.timeouts['textarea'] = setTimeout(() => {
                             this.timeouts['textarea'] = null;
-                            this.initialize();
+                            this.init();
                         }, 100);
                     }
                 });

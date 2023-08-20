@@ -78,7 +78,29 @@ trait HasSteps
     public function getSteps(bool $withHidden = false): array
     {
         $steps = array_map(function (Step $step): Step {
-            $step->container($this);
+            $step
+                ->container($this)
+                ->when(
+                    ! $step->hasActions(),
+                    fn () => $step->actions($this->getActions())
+                )
+//                ->when(
+//                    ($action = $step->getNextStepAction()) === null,
+//                    fn () => $step->nextStepAction($action),
+//                )
+//                ->when(
+//                    ($action = $step->getPreviousAction()) === null,
+//                    fn () => $step->previousStepAction($action),
+//                )
+//                ->when(
+//                    ($action = $step->getSkipTutorialAction()) === null,
+//                    fn () => $step->skipTutorialAction($action),
+//                )
+//                ->when(
+//                    ($action = $step->getCompleteTutorialAction()) === null,
+//                    fn () => $step->completeTutorialAction($action),
+//                )
+            ;
 
             return $step;
         }, $this->evaluate($this->steps));
