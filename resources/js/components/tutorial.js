@@ -1,6 +1,3 @@
-// Import any external JavaScript libraries from NPM here.
-// import Mousetrap from 'mousetrap';
-
 export default function tutorialComponent() {
     return {
         height: 0,
