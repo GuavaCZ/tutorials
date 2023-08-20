@@ -1,27 +1,13 @@
-// Import any external JavaScript libraries from NPM here.
-// import Mousetrap from 'mousetrap';
-
 export default function stepComponent({
                                           key,
                                           selector,
                                           requiresAction,
                                       }) {
     return {
-        targetElement: null,
-        scrollTimeout: null,
-        // You can define any other Alpine.js properties here.
+        target: null,
 
         initialize: function () {
-            // window.addEventListener('scroll', () => {
-            //     if (this.scrollTimeout) {
-            //         clearTimeout(this.scrollTimeout);
-            //     }
-            //
-            //     this.scrollTimeout = setTimeout(() => {
-            //         this.initialize();
-            //     }, 100);
-            // });
-            this.targetElement = this.findElement(key);
+            this.target = this.findElement(key);
 
             this.configure();
 
@@ -35,13 +21,13 @@ export default function stepComponent({
             console.log('requiresAction', requiresAction);
 
             if (requiresAction) {
-                this.targetElement.addEventListener('click', (event) => {
+                this.target.addEventListener('click', (event) => {
                     // event.stopPropagation();
                     event.preventDefault();
                     console.log('$wire', this.$wire.nextTutorialStep());
 
-                    this.targetElement.blur();
-                    const descendants = this.targetElement.querySelectorAll(":hover");
+                    this.target.blur();
+                    const descendants = this.target.querySelectorAll(":hover");
 
                     for (let i = 0; i < descendants.length; i++) {
                         const descendant = descendants[i];
@@ -65,19 +51,19 @@ export default function stepComponent({
 
         configure: function () {
             console.log('configure');
-            console.log(this.targetElement.tagName);
+            console.log(this.target.tagName);
 
-            if (this.targetElement instanceof HTMLSelectElement) {
-                if (this.targetElement.hasAttribute('data-choice')) {
-                    this.targetElement = this.targetElement.parentElement.parentElement;
-                    const dropdown = this.targetElement.querySelector('.choices__list.choices__list--dropdown');
+            if (this.target instanceof HTMLSelectElement) {
+                if (this.target.hasAttribute('data-choice')) {
+                    this.target = this.target.parentElement.parentElement;
+                    const dropdown = this.target.querySelector('.choices__list.choices__list--dropdown');
                     dropdown.style.zIndex = 100;
                 }
             }
 
-            if (this.targetElement.tagName === 'TRIX-EDITOR') {
-                this.timeouts['trix'] = this.targetElement.clientHeight;
-                this.targetElement = this.targetElement.parentElement;
+            if (this.target.tagName === 'TRIX-EDITOR') {
+                this.timeouts['trix'] = this.target.clientHeight;
+                this.target = this.target.parentElement;
                 console.log('is trix');
 
 
@@ -122,22 +108,22 @@ export default function stepComponent({
                     subtree: true,
                 };
 
-                observer.observe(this.targetElement, config);
+                observer.observe(this.target, config);
 
             }
 
-            if (this.targetElement instanceof HTMLTextAreaElement || this.t) {
+            if (this.target instanceof HTMLTextAreaElement || this.t) {
                 console.log('is textarea');
                 // Get the initial size of the textarea
-                let initialWidth = this.targetElement.offsetWidth;
-                let initialHeight = this.targetElement.offsetHeight;
+                let initialWidth = this.target.offsetWidth;
+                let initialHeight = this.target.offsetHeight;
 
                 // Create a MutationObserver to monitor size changes
                 const observer = new MutationObserver(() => {
-                    if (this.targetElement.offsetWidth !== initialWidth || this.targetElement.offsetHeight !== initialHeight) {
+                    if (this.target.offsetWidth !== initialWidth || this.target.offsetHeight !== initialHeight) {
                         console.log('Textarea was resized.');
-                        initialWidth = this.targetElement.offsetWidth;
-                        initialHeight = this.targetElement.offsetHeight;
+                        initialWidth = this.target.offsetWidth;
+                        initialHeight = this.target.offsetHeight;
 
                         if (this.timeouts['textarea']) {
                             clearTimeout(this.timeouts['textarea']);
@@ -151,7 +137,7 @@ export default function stepComponent({
                 });
 
                 // Start observing changes in the textarea element
-                observer.observe(this.targetElement, {attributes: true, attributeFilter: ['style']});
+                observer.observe(this.target, {attributes: true, attributeFilter: ['style']});
             }
         },
         // You can define any other Alpine.js functions here.
@@ -211,7 +197,7 @@ export default function stepComponent({
         },
 
         clipPath: function (element = null, options = {}) {
-            element = element || this.targetElement;
+            element = element || this.target;
             options = {
                 radius: 24,
                 margin: 10,
@@ -246,7 +232,7 @@ export default function stepComponent({
         },
 
         elementPath: function (element = null, options = {}) {
-            element = element || this.targetElement;
+            element = element || this.target;
             options = {
                 radius: 24,
                 margin: 10,
@@ -275,7 +261,7 @@ export default function stepComponent({
 
         elementRect: function (element = null, options = {}) {
 
-            element = element || this.targetElement;
+            element = element || this.target;
             const bounds = element.getBoundingClientRect();
             console.log('bounds', bounds.left, bounds.top);
             console.log('offset', element.offsetLeft, element.offsetTop);
