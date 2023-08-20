@@ -18,8 +18,7 @@
         ])
 
 >
-    <div
-            x-bind:init="initialize()"></div>
+    <div x-bind:init="initialize()"></div>
     <div
             data-dialog
             @class([
@@ -50,7 +49,7 @@
             <path
                     data-dialog-path
                     @class([
-                        'stroke-2',
+                        'stroke-[4px]',
                         match ($getColor()) {
                             'gray' => 'stroke-gray-950 dark:text-white',
                             default => 'stroke-custom-600 dark:stroke-custom-400',

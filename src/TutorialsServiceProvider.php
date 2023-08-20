@@ -14,6 +14,7 @@ class TutorialsServiceProvider extends PackageServiceProvider
         $package
             ->name('tutorials')
             ->hasViews()
+            ->hasTranslations()
         ;
     }
 

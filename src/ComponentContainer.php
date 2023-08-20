@@ -3,6 +3,7 @@
 namespace Guava\Tutorials;
 
 use Filament\Forms\Components\Component;
+use Filament\Forms\Concerns\HasOperation;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Get;
 use Filament\Support\Components\ViewComponent;
@@ -14,10 +15,13 @@ class ComponentContainer extends ViewComponent
     use Concerns\HasName;
     use Concerns\HasLabel;
     use Concerns\BelongsToLivewire;
-//    use Concerns\HasState;
+
+    //    use Concerns\HasState;
     use Concerns\HasSteps;
     use Concerns\HasLifecycleEvents;
     use Concerns\CanBeCompleted;
+    use Concerns\CanHaveFormCallbacks;
+    use HasOperation;
 
     protected string $view = 'tutorials::component-container';
 
@@ -37,47 +41,29 @@ class ComponentContainer extends ViewComponent
         return app(static::class, ['livewire' => $livewire]);
     }
 
-    protected function getGetCallback(): callable
-    {
-        $component = new Component();
-        /** @var HasForms $livewire */
-        $livewire = $this->getLivewire();
-        $form = $livewire->getForm('form');
-        $component->container($form);
-
-        return new Get($component);
-    }
-
-    /**
-     * @param string $parameterName
-     * @return array
-     */
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
     {
         return match ($parameterName) {
             'livewire' => [$this->getLivewire()],
-            'get' => [$this->getGetCallback()],
+            'tutorial', 'container' => [$this],
             'model' => [$this->getLivewire()->getModel()],
             'record' => [$this->getLivewire()->getRecord()],
+            'get' => [$this->getGetCallback()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
     }
 
-    //    /**
-    //     * @return array<mixed>
-    //     */
-    //    protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
-    //    {
-    //        $record = $this->getRecord();
-    //
-    //        if (! $record) {
-    //            return parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType);
-    //        }
-    //
-    //        return match ($parameterType) {
-    //            Model::class, $record::class => [$record],
-    //            default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
-    //        };
-    //    }
+    protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
+    {
+        $record = $this->getLivewire()->getRecord();
 
+        if (! $record) {
+            return parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType);
+        }
+
+        return match ($parameterType) {
+            Model::class, $record::class => [$record],
+            default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
+        };
+    }
 }

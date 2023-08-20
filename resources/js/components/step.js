@@ -22,35 +22,136 @@ export default function stepComponent({
             //     }, 100);
             // });
             this.targetElement = this.findElement(key);
+
+            this.configure();
+
+            // setTimeout(() => {
+            console.log('initialize');
+            console.log('this.$el', this.$el);
+            const dialog = this.$root.querySelector('[data-dialog]');
+            console.log('dialogos', dialog);
+            const clipPath = this.$root.querySelector('[data-clip-path]');
+            console.log('clipPath', clipPath);
+            console.log('requiresAction', requiresAction);
+
+            if (requiresAction) {
+                this.targetElement.addEventListener('click', (event) => {
+                    // event.stopPropagation();
+                    event.preventDefault();
+                    console.log('$wire', this.$wire.nextTutorialStep());
+
+                    this.targetElement.blur();
+                    const descendants = this.targetElement.querySelectorAll(":hover");
+
+                    for (let i = 0; i < descendants.length; i++) {
+                        const descendant = descendants[i];
+                        descendant.blur();
+                    }
+                });
+            }
+
+            this.initializeDialog();
             setTimeout(() => {
-                console.log('initialize');
-                console.log('this.$el', this.$el);
-                const dialog = this.$root.querySelector('[data-dialog]');
-                console.log('dialogos', dialog);
-                const clipPath = this.$root.querySelector('[data-clip-path]');
-                console.log('clipPath', clipPath);
-                console.log('requiresAction', requiresAction);
 
-                if (requiresAction) {
-                    this.targetElement.addEventListener('click', (event) => {
-                        // event.stopPropagation();
-                        event.preventDefault();
-                        console.log('$wire', this.$wire.nextTutorialStep());
+            clipPath.setAttribute('d', this.clipPath());
+            }, 4);
 
-                        this.targetElement.blur();
-                        const descendants = this.targetElement.querySelectorAll(":hover");
+            clipPath.setAttribute('d', this.clipPath());
+            // }, 1);
+        },
 
-                        for (let i = 0; i < descendants.length; i++) {
-                            const descendant = descendants[i];
-                            descendant.blur();
-                        }
-                    });
+        timeouts: [],
+
+        configure: function () {
+            console.log('configure');
+            console.log(this.targetElement.tagName);
+
+            if (this.targetElement instanceof HTMLSelectElement) {
+                if (this.targetElement.hasAttribute('data-choice')) {
+                    this.targetElement = this.targetElement.parentElement.parentElement;
+                    const dropdown = this.targetElement.querySelector('.choices__list.choices__list--dropdown');
+                    dropdown.style.zIndex = 100;
                 }
+            }
 
-                this.initializeDialog();
-                clipPath.setAttribute('d', this.clipPath());
+            if (this.targetElement.tagName === 'TRIX-EDITOR') {
+                this.timeouts['trix'] = this.targetElement.clientHeight;
+                this.targetElement = this.targetElement.parentElement;
+                console.log('is trix');
 
-            }, 1);
+
+                const observer = new MutationObserver((mutationsList, observer) => {
+
+                    console.log('resized');
+                    // this.initialize();
+                    mutationsList.forEach((mutation) => {
+                        console.log('mutation', mutation);
+                        // let height = mutation.target.clientHeight;
+
+                        // if (height != this.timeouts['trix-height']) {
+                        //     this.timeouts['trix-height'] = height;
+
+                            if (this.timeouts['trix']) {
+                                clearTimeout(this.timeouts['trix']);
+                            }
+
+                            this.timeouts['trix'] = setTimeout(() => {
+                                this.timeouts['trix'] = null;
+                                this.initialize();
+                            }, 500);
+                        // }
+
+                        //     if (mutation.type === 'attributes') {
+                        //         if (mutation.attributeName === 'width' || mutation.attributeName === 'height') {
+                        //             const target = mutation.target;
+                        //             const newWidth = target.offsetWidth; // or target.style.width
+                        //             const newHeight = target.offsetHeight; // or target.style.height
+                        //
+                        //             console.log(`Width changed to: ${newWidth}`);
+                        //             console.log(`Height changed to: ${newHeight}`);
+                        //         }
+                        //     }
+                    });
+                });
+
+                const config = {
+                    attributes: true,
+                    attributeFilter: ['height'],
+                    childList: true,
+                    subtree: true,
+                };
+
+                observer.observe(this.targetElement, config);
+
+            }
+
+            if (this.targetElement instanceof HTMLTextAreaElement || this.t) {
+                console.log('is textarea');
+                // Get the initial size of the textarea
+                let initialWidth = this.targetElement.offsetWidth;
+                let initialHeight = this.targetElement.offsetHeight;
+
+                // Create a MutationObserver to monitor size changes
+                const observer = new MutationObserver(() => {
+                    if (this.targetElement.offsetWidth !== initialWidth || this.targetElement.offsetHeight !== initialHeight) {
+                        console.log('Textarea was resized.');
+                        initialWidth = this.targetElement.offsetWidth;
+                        initialHeight = this.targetElement.offsetHeight;
+
+                        if (this.timeouts['textarea']) {
+                            clearTimeout(this.timeouts['textarea']);
+                        }
+
+                        this.timeouts['textarea'] = setTimeout(() => {
+                            this.timeouts['textarea'] = null;
+                            this.initialize();
+                        }, 100);
+                    }
+                });
+
+                // Start observing changes in the textarea element
+                observer.observe(this.targetElement, {attributes: true, attributeFilter: ['style']});
+            }
         },
         // You can define any other Alpine.js functions here.
 
@@ -66,7 +167,7 @@ export default function stepComponent({
             const stroke = dialog.querySelector('[data-dialog-stroke]');
 
             window.scrollTo({
-                top: rect[0].y - (window.innerHeight/3),
+                top: rect[0].y - (window.innerHeight / 3),
                 left: rect[0].x,
                 behavior: 'smooth'
             });
@@ -184,7 +285,7 @@ export default function stepComponent({
                 relative: false,
                 ...options
             }
-            const left = options.relative ? 0 : element.offsetLeft;
+            const left = options.relative ? 0 : bounds.left;
             const top = options.relative ? 0 : element.offsetTop;
             console.log('left/top', left, top);
 

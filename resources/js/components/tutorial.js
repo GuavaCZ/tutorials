@@ -2,25 +2,32 @@
 // import Mousetrap from 'mousetrap';
 
 export default function tutorialComponent({
-    index,
+                                              index,
                                           }) {
     return {
         index: index,
         scrollTimeout: null,
+        documentHeight: 0,
 
         init: function () {
+            this.tutorial = this;
             console.log('Init tutorial');
-            document.body.style.overflow = 'hidden';
+            // document.body.style.overflow = 'hidden';
 
             // TODO:
-            const documentHeight = Math.max(
-                document.documentElement.clientHeight,
-                document.documentElement.scrollHeight,
-                document.documentElement.offsetHeight,
-            );
+            this.documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight,
+                document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
 
-            console.log('documentos heightos', documentHeight);
-            this.$el.style.height = documentHeight + 'px';
+            setTimeout(() => {
+                this.documentHeight = document.documentElement.getBoundingClientRect().height;
+
+                console.log('delay height', this.documentHeight);
+
+                this.$el.style.height = this.documentHeight + 'px';
+            }, 1);
+
+            console.log('height', this.documentHeight);
+            this.$el.style.height = this.documentHeight + 'px';
 
             // TODO: call only height modifeir
             // window.addEventListener('scroll', () => {

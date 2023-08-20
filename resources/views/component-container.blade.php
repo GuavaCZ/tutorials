@@ -5,7 +5,7 @@
 @if($mountedTutorial === $container)
     <div>
         <div
-                id="something"
+{{--                id="something"--}}
                 x-ignore
                 ax-load
                 ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('tutorial', 'guava/tutorials') }}"
@@ -15,7 +15,7 @@
                 })"
 
                 @class([
-                    'absolute top-0 left-0 w-screen h-screen z-40',
+                    'absolute top-0 left-0 w-screen h-screen z-40 bg-fixed',
                     'bg-black/80',
                     '[clip-path:url(#stepClipPath)]',
                     'dark:bg-gray-800/80',

@@ -2,9 +2,6 @@
 
 namespace Guava\Tutorials\Steps;
 
-use Filament\Forms\Components\Component;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Get;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasColor;
 use Guava\Tutorials\Concerns;
@@ -12,6 +9,7 @@ use Guava\Tutorials\Filament\TutorialAction;
 use Guava\Tutorials\Selectors\FieldSelector;
 use Guava\Tutorials\Selectors\Selector;
 use Guava\Tutorials\Tutorial;
+use Illuminate\Database\Eloquent\Model;
 
 class Step extends ViewComponent
 {
@@ -29,24 +27,8 @@ class Step extends ViewComponent
     use Concerns\CanBeInteracted;
     use Concerns\RequiresAction;
     use Concerns\HasActions;
+    use Concerns\CanHaveFormCallbacks;
     use HasColor;
-
-    //    use Concerns\CanSpanColumns;
-    //    use Concerns\Cloneable;
-    //    use Concerns\HasActions;
-    //    use Concerns\HasChildComponents;
-    //    use Concerns\HasFieldWrapper;
-    //    use Concerns\HasId;
-    //    use Concerns\HasInlineLabel;
-
-    //    use Concerns\HasLabel;
-    //    use Concerns\HasMaxWidth;
-    //    use Concerns\HasMeta;
-    //    use Concerns\HasState;
-    //    use Concerns\ListensToEvents;
-    //    use HasColumns;
-    //    use HasExtraAttributes;
-    //    use HasStateBindingModifiers;
 
     protected string $view = 'tutorials::step';
 
@@ -56,39 +38,66 @@ class Step extends ViewComponent
 
     protected Selector $selector;
 
+    protected ?TutorialAction $nextStepAction = null;
+
     final public function __construct(string $name, Selector $selector)
     {
         $this->name($name);
         $this->selector = $selector;
+
+        $this->configure();
     }
 
     public function configure(): static
     {
         return $this
             ->color('primary')
-            ->hint(fn (Tutorial $tutorial, $livewire) => "{$livewire->getIndex(true)} / {$tutorial->getTotalSteps()}")
+            ->hint(
+                fn (Tutorial $tutorial, $livewire) => trans_choice(
+                    'tutorials::step.hint',
+                    $tutorial->getTotalSteps(),
+                    [
+                        'current' => $livewire->getIndex(true),
+                        'total' => $tutorial->getTotalSteps(),
+                    ]
+                )
+            )
             ->actions(
                 [
-                    //                TutorialAction::make("{$this->getKey()}_continue")
-                    TutorialAction::make(uniqid())
-//                    ->icon('heroicon-o-user')
-                        ->parentComponent($this)
-//                    ->disabled()
-//                    ->hidden()
-                        ->disabled(fn ($get) => empty($get('name')))
-                        ->color($this->getColor())
-//                    ->label(fn($get) => $get('name'))
-                        ->label(fn (Tutorial $tutorial) => $tutorial->isLastStep() ? 'Complete' : 'Next')
-                        ->action('nextTutorialStep()'),
+                    $this->getNextStepAction(),
                 ]
             )
         ;
     }
 
-    //    public function getId(): string
-    //    {
-    //        return parent::getId() ?? $this->getStatePath();
-    //    }
+    public function nextStepAction(TutorialAction | \Closure $action): static
+    {
+        $this->nextStepAction = $action;
+
+        return $this;
+    }
+
+    public function getNextStepAction(): TutorialAction
+    {
+        return $this->evaluate($this->nextStepAction, [
+            'action' => $this->getDefaultNextStepAction(),
+        ]) ?? $this->getDefaultNextStepAction();
+    }
+
+    protected function getDefaultNextStepAction(): TutorialAction
+    {
+        return TutorialAction::make(uniqid())
+            ->icon(fn (Tutorial $tutorial) => $tutorial->isLastStep()
+                ? 'heroicon-o-check-circle'
+                : 'heroicon-o-arrow-right-circle')
+            ->parentComponent($this)
+//            ->disabled(fn (callable $get, Step $step) => ! $get($step->getName()) && empty($get($step->getName())))
+            ->color($this->getColor())
+            ->label(fn (Tutorial $tutorial) => $tutorial->isLastStep()
+                ? __('tutorials::step.complete') : __('tutorials::step.next'))
+            ->action('nextTutorialStep()')
+        ;
+    }
 
     public function getKey(): string
     {
@@ -112,43 +121,36 @@ class Step extends ViewComponent
         $name = $selector instanceof Selector ? uniqid() : $selector;
         $selector = $selector instanceof Selector ? $selector : FieldSelector::make($name);
 
-        $static = app(static::class, [
+        return app(static::class, [
             'name' => $name,
             'selector' => $selector,
         ]);
-        $static->configure();
-
-        return $static;
     }
 
-    public function getGetCallback(): callable
-    {
-        $component = new Component();
-        /** @var HasForms $livewire */
-        $livewire = $this->getLivewire();
-        $form = $livewire->getForm('form');
-        $component->container($form);
-
-        return new Get($component);
-    }
-
-    /**
-     * @return array<mixed>
-     */
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
     {
         return match ($parameterName) {
-            //            'context', 'operation' => [$this->getContainer()->getOperation()],
-            //            'get' => [$this->getGetCallback()],
             'livewire' => [$this->getLivewire()],
             'step' => [$this],
-            'get' => [$this->getGetCallback()],
             'tutorial', 'container' => [$this->getContainer()],
-            //            'model' => [$this->getModel()],
-            //            'record' => [$this->getRecord()],
-            //            'set' => [$this->getSetCallback()],
-            //            'state' => [$this->getState()],
+            'model' => [$this->getLivewire()->getModel()],
+            'record' => [$this->getLivewire()->getRecord()],
+            'get' => [$this->getGetCallback()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
+        };
+    }
+
+    protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
+    {
+        $record = $this->getLivewire()->getRecord();
+
+        if (! $record) {
+            return parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType);
+        }
+
+        return match ($parameterType) {
+            Model::class, $record::class => [$record],
+            default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
         };
     }
 }
