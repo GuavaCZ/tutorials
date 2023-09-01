@@ -8,7 +8,8 @@
         x-data="stepComponent({
             key: '{{$getKey()}}',
             selector: '{{$getSelector()}}',
-            requiresAction: @js($isActionRequired()),
+            shouldInterceptClick: @js($shouldInterceptClick()),
+            interceptClickAction: @js($getInterceptClickAction()),
         })"
 
         class="absolute top-0 left-0"
@@ -16,7 +17,6 @@
         @style([
             \Filament\Support\get_color_css_variables($getColor(), shades: [400, 500, 600, 950]) => $getColor() !== 'gray',
         ])
-
 >
     <div
             data-dialog

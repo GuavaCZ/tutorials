@@ -22,6 +22,8 @@ class NextStepAction extends TutorialAction
 
         $this->label(__('tutorials::step.next'));
 
+        $this->keyBindings('enter');
+
         $this->action('nextTutorialStep()');
     }
 

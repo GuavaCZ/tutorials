@@ -1,5 +1,5 @@
 @php
-    $interactive = true;
+    $shouldPassThrough = true;
     $mountedTutorial = $this->getMountedTutorial();
 @endphp
 
@@ -29,19 +29,20 @@
 
                 <div wire:key="tutorial-step-{{$step->getKey()}}-{{uniqid()}}">
                     @if($loop->index === $this->getIndex())
-                        @if(! $step->isInteractive())
+                        @if(! $step->shouldPassThrough())
                             @php
-                                $interactive = false;
+                                $shouldPassThrough = false;
                             @endphp
                         @endif
+
                         {{$step}}
                     @endif
                 </div>
             @endforeach
         </div>
 
-        @if(! $interactive)
-            <div class="fixed top-0 left-0 w-screen h-screen z-30" wire:key="{{$step->getKey()}}-interactivity"
+        @if(! $shouldPassThrough)
+            <div class="fixed top-0 left-0 w-screen h-screen z-30" wire:key="{{$step->getKey()}}-pass-through"
                  x-on:click.prevent.stop
             ></div>
         @endif

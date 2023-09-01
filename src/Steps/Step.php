@@ -28,6 +28,8 @@ class Step extends ViewComponent
     use Concerns\RequiresAction;
     use Concerns\HasActions;
     use Concerns\CanHaveFormCallbacks;
+    use Concerns\CanPassThrough;
+    use Concerns\CanInterceptClick;
     use HasColor;
 
     protected string $view = 'tutorials::step';

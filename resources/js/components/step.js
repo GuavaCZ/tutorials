@@ -1,7 +1,8 @@
 export default function stepComponent({
                                           key,
                                           selector,
-                                          requiresAction,
+                                          shouldInterceptClick,
+                                          interceptClickAction,
                                       }) {
     return {
         target: null,
@@ -9,22 +10,36 @@ export default function stepComponent({
         init: function () {
             this.target = this.findElement(key);
 
+            if (! this.target) {
+                console.error('Tutorial step was not found:', key);
+                return;
+            }
+
+            // window.blur();
+            // document.documentElement.blur();
+            document.documentElement.querySelectorAll('input')
+                .forEach((element) => element.blur());
+            if (this.target) {
+                this.target.focus();
+            }
+
             this.configure();
 
             // setTimeout(() => {
             console.log('initialize');
             console.log('this.$el', this.$el);
-            const dialog = this.$root.querySelector('[data-dialog]');
+            const dialog = this.$el.querySelector('[data-dialog]');
             console.log('dialogos', dialog);
-            const clipPath = this.$root.querySelector('[data-clip-path]');
+            const clipPath = this.$el.querySelector('[data-clip-path]');
             console.log('clipPath', clipPath);
-            console.log('requiresAction', requiresAction);
+            console.log('shouldInterceptClick', shouldInterceptClick);
 
-            if (requiresAction) {
+            if (shouldInterceptClick) {
                 this.target.addEventListener('click', (event) => {
+                    console.log('INTERCEPT2');
                     // event.stopPropagation();
                     event.preventDefault();
-                    console.log('$wire', this.$wire.nextTutorialStep());
+                    this.$wire.call(interceptClickAction);
 
                     this.target.blur();
                     const descendants = this.target.querySelectorAll(":hover");
@@ -50,6 +65,25 @@ export default function stepComponent({
         timeouts: [],
 
         configure: function () {
+            document.addEventListener('keydown', function (event) {
+                // Get the key code of the key pressed
+                var key = event.key;
+
+                // Get the state of the modifier keys
+                // var isCtrlKey = event.ctrlKey || event.metaKey;
+                // var isAltKey = event.altKey;
+                var isShiftKey = event.shiftKey;
+                var isCtrlKey = false;
+                var isAltKey = false;
+
+                // Check if any combination of modifier keys and normal keys were pressed
+                // if (isCtrlKey || isAltKey || isShiftKey || key === 'Tab') {
+                // if (key === 'Tab' || isShiftKey && key === 'Tab') {
+                if (key === 'Tab') {
+                    event.preventDefault(); // Prevent the default event behavior
+                }
+            });
+
             console.log('configure');
             console.log(this.target.tagName);
 
@@ -144,7 +178,7 @@ export default function stepComponent({
 
         initializeDialog: function (dialog = null) {
             if (!dialog) {
-                dialog = this.$root.querySelector('[data-dialog]');
+                dialog = this.$el.querySelector('[data-dialog]');
             }
             const dialogPath = dialog.querySelector('[data-dialog-path]');
 
@@ -177,7 +211,7 @@ export default function stepComponent({
             console.log('x', x);
             console.log('y', y);
             console.log('dialog', dialog);
-            // dialog = this.$root.querySelector('[data-dialog]');
+            // dialog = this.$el.querySelector('[data-dialog]');
             dialog.style.width = `${width}px`;
             dialog.style.transform = `translate(${x}px, ${y}px)`;
             // console.log('Delayed dialog', dialog);
@@ -185,8 +219,8 @@ export default function stepComponent({
             // document.querySelectorAll('[data-dialog]').forEach((dialog) => {
             //    dialog.remove();
             // });
-            // console.log('self.$root', self.$root);
-            // self.$root.appendChild(dialog);
+            // console.log('self.$el', self.$el);
+            // self.$el.appendChild(dialog);
             // console.log(document.getElementById('something'));
             // document.getElementById('something').appendChild(dialog);
             // document.body.appendChild(dialog);
