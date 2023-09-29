@@ -14,10 +14,7 @@ use Guava\Tutorials\Tutorial;
 trait InteractsWithTutorials
 {
     use ResolvesDynamicLivewireProperties;
-    use InteractsWithTutorialActions;
     use HandlesTutorialState;
-
-    protected array $tutorialData = [];
 
     /**
      * @var array<string, Tutorial>
@@ -27,8 +24,6 @@ trait InteractsWithTutorials
     protected bool $hasCachedTutorials = false;
 
     protected bool $isCachingTutorials = false;
-
-    //    protected bool $hasTutorialsModalRendered = false;
 
     protected function cacheTutorial(string $name, Tutorial | Closure | null $tutorial): ?Tutorial
     {
@@ -55,7 +50,6 @@ trait InteractsWithTutorials
         $this->isCachingTutorials = true;
 
         $this->cachedTutorials = collect($this->getTutorials())
-//            ->merge($this->getTraitTutorials())
             ->mapWithKeys(function (Tutorial | string | null $tutorial, string | int $tutorialName): array {
                 if ($tutorial === null) {
                     return ['' => null];
@@ -71,7 +65,7 @@ trait InteractsWithTutorials
                     throw new Exception("Tutorial configuration method [{$tutorialName}()] is missing from Livewire component [{$livewireClass}].");
                 }
 
-                return [$tutorial => $this->{$tutorial}($this->makeTutorial())];
+                return [$tutorial => $this->{$tutorial}($this->makeTutorial()->name($tutorial))];
             })
             ->forget('')
             ->all()
@@ -80,13 +74,6 @@ trait InteractsWithTutorials
         $this->isCachingTutorials = false;
 
         $this->hasCachedTutorials = true;
-
-        //        foreach ($this->mountedFormComponentActions as $actionNestingIndex => $actionName) {
-        //            $this->cacheForm(
-        //                "mountedFormComponentActionForm{$actionNestingIndex}",
-        //                $this->getMountedFormComponentActionForm($actionNestingIndex),
-        //            );
-        //        }
 
         return $this->cachedTutorials;
     }
@@ -138,9 +125,14 @@ trait InteractsWithTutorials
         return $this->isCachingTutorials;
     }
 
-    public function boot(): void
+    public function bootInteractsWithTutorials(): void
     {
         static::$view = static::getView();
+
+        $this->listeners = [
+            ...$this->listeners,
+            'mountTutorial',
+        ];
     }
 
     public static function getView(): string
@@ -186,12 +178,10 @@ trait InteractsWithTutorials
         $this->mountedTutorial = null;
     }
 
-    //    public function mount(): void
-    //    {
-    //        if (method_exists(get_parent_class($this), 'mount')) {
-    //            parent::mount();
-    //        }
-    //
-    //        $this->totalSteps = $this->getTutorial('tutorial')->getTotalSteps();
-    //    }
+    protected function getListeners(): array
+    {
+        return [
+            'mountTutorial',
+        ];
+    }
 }

@@ -1,52 +1,184 @@
-// Import any external JavaScript libraries from NPM here.
-// import Mousetrap from 'mousetrap';
-
 export default function stepComponent({
                                           key,
                                           selector,
-                                          requiresAction,
+                                          shouldInterceptClick,
+                                          interceptClickAction,
                                       }) {
     return {
-        targetElement: null,
-        // You can define any other Alpine.js properties here.
+        target: null,
 
-        initialize: function () {
-            this.targetElement = this.findElement(key);
-            setTimeout(() => {
-                console.log('initialize');
-                console.log('this.$el', this.$el);
-                const dialog = this.$root.querySelector('[data-dialog]');
-                console.log('dialogos', dialog);
-                const clipPath = this.$root.querySelector('[data-clip-path]');
-                console.log('clipPath', clipPath);
-                console.log('requiresAction', requiresAction);
+        init: function () {
+            this.target = this.findElement(key);
 
-                if (requiresAction) {
-                    this.targetElement.addEventListener('click', (event) => {
-                        // event.stopPropagation();
-                        event.preventDefault();
-                        console.log('$wire', this.$wire.nextTutorialStep());
+            if (! this.target) {
+                console.error('Tutorial step was not found:', key);
+                return;
+            }
 
-                        this.targetElement.blur();
-                        const descendants = this.targetElement.querySelectorAll(":hover");
+            // window.blur();
+            // document.documentElement.blur();
+            document.documentElement.querySelectorAll('input')
+                .forEach((element) => element.blur());
+            if (this.target) {
+                this.target.focus();
+            }
 
-                        for (let i = 0; i < descendants.length; i++) {
-                            const descendant = descendants[i];
-                            descendant.blur();
-                        }
-                    });
+            this.configure();
+
+            // setTimeout(() => {
+            console.log('initialize');
+            console.log('this.$el', this.$el);
+            const dialog = this.$el.querySelector('[data-dialog]');
+            console.log('dialogos', dialog);
+            const clipPath = this.$el.querySelector('[data-clip-path]');
+            console.log('clipPath', clipPath);
+            console.log('shouldInterceptClick', shouldInterceptClick);
+
+            if (shouldInterceptClick) {
+                this.target.addEventListener('click', (event) => {
+                    console.log('INTERCEPT2');
+                    // event.stopPropagation();
+                    event.preventDefault();
+                    this.$wire.call(interceptClickAction);
+
+                    this.target.blur();
+                    const descendants = this.target.querySelectorAll(":hover");
+
+                    for (let i = 0; i < descendants.length; i++) {
+                        const descendant = descendants[i];
+                        descendant.blur();
+                    }
+                });
+            }
+
+            this.initializeDialog();
+
+            this.$nextTick(() => {
+                clipPath.setAttribute('d', this.clipPath());
+                this.$dispatch('tutorial::render');
+            });
+
+            clipPath.setAttribute('d', this.clipPath());
+            // }, 1);
+        },
+
+        timeouts: [],
+
+        configure: function () {
+            document.addEventListener('keydown', function (event) {
+                // Get the key code of the key pressed
+                var key = event.key;
+
+                // Get the state of the modifier keys
+                // var isCtrlKey = event.ctrlKey || event.metaKey;
+                // var isAltKey = event.altKey;
+                var isShiftKey = event.shiftKey;
+                var isCtrlKey = false;
+                var isAltKey = false;
+
+                // Check if any combination of modifier keys and normal keys were pressed
+                // if (isCtrlKey || isAltKey || isShiftKey || key === 'Tab') {
+                // if (key === 'Tab' || isShiftKey && key === 'Tab') {
+                if (key === 'Tab') {
+                    event.preventDefault(); // Prevent the default event behavior
                 }
+            });
 
-                this.initializeDialog();
-                // clipPath.setAttribute('d', this.clipPath());
+            console.log('configure');
+            console.log(this.target.tagName);
 
-            }, 1);
+            if (this.target instanceof HTMLSelectElement) {
+                if (this.target.hasAttribute('data-choice')) {
+                    this.target = this.target.parentElement.parentElement;
+                    const dropdown = this.target.querySelector('.choices__list.choices__list--dropdown');
+                    dropdown.style.zIndex = 100;
+                }
+            }
+
+            if (this.target.tagName === 'TRIX-EDITOR') {
+                this.timeouts['trix'] = this.target.clientHeight;
+                this.target = this.target.parentElement;
+                console.log('is trix');
+
+
+                const observer = new MutationObserver((mutationsList, observer) => {
+
+                    console.log('resized');
+                    // this.initialize();
+                    mutationsList.forEach((mutation) => {
+                        console.log('mutation', mutation);
+                        // let height = mutation.target.clientHeight;
+
+                        // if (height != this.timeouts['trix-height']) {
+                        //     this.timeouts['trix-height'] = height;
+
+                        if (this.timeouts['trix']) {
+                            clearTimeout(this.timeouts['trix']);
+                        }
+
+                        this.timeouts['trix'] = setTimeout(() => {
+                            this.timeouts['trix'] = null;
+                            this.init();
+                        }, 500);
+                        // }
+
+                        //     if (mutation.type === 'attributes') {
+                        //         if (mutation.attributeName === 'width' || mutation.attributeName === 'height') {
+                        //             const target = mutation.target;
+                        //             const newWidth = target.offsetWidth; // or target.style.width
+                        //             const newHeight = target.offsetHeight; // or target.style.height
+                        //
+                        //             console.log(`Width changed to: ${newWidth}`);
+                        //             console.log(`Height changed to: ${newHeight}`);
+                        //         }
+                        //     }
+                    });
+                });
+
+                const config = {
+                    attributes: true,
+                    attributeFilter: ['height'],
+                    childList: true,
+                    subtree: true,
+                };
+
+                observer.observe(this.target, config);
+
+            }
+
+            if (this.target instanceof HTMLTextAreaElement || this.t) {
+                console.log('is textarea');
+                // Get the initial size of the textarea
+                let initialWidth = this.target.offsetWidth;
+                let initialHeight = this.target.offsetHeight;
+
+                // Create a MutationObserver to monitor size changes
+                const observer = new MutationObserver(() => {
+                    if (this.target.offsetWidth !== initialWidth || this.target.offsetHeight !== initialHeight) {
+                        console.log('Textarea was resized.');
+                        initialWidth = this.target.offsetWidth;
+                        initialHeight = this.target.offsetHeight;
+
+                        if (this.timeouts['textarea']) {
+                            clearTimeout(this.timeouts['textarea']);
+                        }
+
+                        this.timeouts['textarea'] = setTimeout(() => {
+                            this.timeouts['textarea'] = null;
+                            this.init();
+                        }, 100);
+                    }
+                });
+
+                // Start observing changes in the textarea element
+                observer.observe(this.target, {attributes: true, attributeFilter: ['style']});
+            }
         },
         // You can define any other Alpine.js functions here.
 
         initializeDialog: function (dialog = null) {
             if (!dialog) {
-                dialog = this.$root.querySelector('[data-dialog]');
+                dialog = this.$el.querySelector('[data-dialog]');
             }
             const dialogPath = dialog.querySelector('[data-dialog-path]');
 
@@ -54,6 +186,12 @@ export default function stepComponent({
             const rect = this.elementRect();
             // const header = dialog.querySelector('[data-dialog-header]');
             const stroke = dialog.querySelector('[data-dialog-stroke]');
+
+            window.scrollTo({
+                top: rect[0].y - (window.innerHeight / 3),
+                left: rect[0].x,
+                behavior: 'smooth'
+            });
 
             const width = rect[1].x - rect[0].x;
             const height = rect[2].y - rect[0].y;
@@ -73,7 +211,7 @@ export default function stepComponent({
             console.log('x', x);
             console.log('y', y);
             console.log('dialog', dialog);
-            // dialog = this.$root.querySelector('[data-dialog]');
+            // dialog = this.$el.querySelector('[data-dialog]');
             dialog.style.width = `${width}px`;
             dialog.style.transform = `translate(${x}px, ${y}px)`;
             // console.log('Delayed dialog', dialog);
@@ -81,8 +219,8 @@ export default function stepComponent({
             // document.querySelectorAll('[data-dialog]').forEach((dialog) => {
             //    dialog.remove();
             // });
-            // console.log('self.$root', self.$root);
-            // self.$root.appendChild(dialog);
+            // console.log('self.$el', self.$el);
+            // self.$el.appendChild(dialog);
             // console.log(document.getElementById('something'));
             // document.getElementById('something').appendChild(dialog);
             // document.body.appendChild(dialog);
@@ -93,7 +231,7 @@ export default function stepComponent({
         },
 
         clipPath: function (element = null, options = {}) {
-            element = element || this.targetElement;
+            element = element || this.target;
             options = {
                 radius: 24,
                 margin: 10,
@@ -105,11 +243,17 @@ export default function stepComponent({
         },
 
         windowPath: function () {
+            const documentHeight = Math.max(
+                document.documentElement.clientHeight,
+                document.documentElement.scrollHeight,
+                document.documentElement.offsetHeight,
+            );
+
             // TODO: add option to select clockwise /counter clockwise
             //M 0 8 C 0 0 0 0 8 0 L 38 0 C 46 0 46 0 46 8 C 46 16 46 16 38 16 L 8 16 C 0 16 0 16 0 8
             let path = 'M 0 0 ';
-            path += 'L 0 ' + window.innerHeight + ' ';
-            path += 'L ' + window.innerWidth + ' ' + window.innerHeight + ' ';
+            path += 'L 0 ' + documentHeight + ' ';
+            path += 'L ' + window.innerWidth + ' ' + documentHeight + ' ';
             path += 'L ' + window.innerWidth + ' 0 ';
             path += 'L 0 0 ';
 
@@ -122,7 +266,7 @@ export default function stepComponent({
         },
 
         elementPath: function (element = null, options = {}) {
-            element = element || this.targetElement;
+            element = element || this.target;
             options = {
                 radius: 24,
                 margin: 10,
@@ -151,9 +295,10 @@ export default function stepComponent({
 
         elementRect: function (element = null, options = {}) {
 
-            element = element || this.targetElement;
+            element = element || this.target;
             const bounds = element.getBoundingClientRect();
             console.log('bounds', bounds.left, bounds.top);
+            console.log('offset', element.offsetLeft, element.offsetTop);
             options = {
                 radius: 24,
                 margin: 10,
@@ -162,7 +307,8 @@ export default function stepComponent({
                 ...options
             }
             const left = options.relative ? 0 : bounds.left;
-            const top = options.relative ? 0 : bounds.top;
+            const top = options.relative ? 0 : element.offsetTop;
+            console.log('left/top', left, top);
 
             let result = [
                 {

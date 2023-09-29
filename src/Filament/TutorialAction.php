@@ -5,17 +5,21 @@ namespace Guava\Tutorials\Filament;
 use Closure;
 use Filament\Actions\StaticAction;
 use Guava\Tutorials\Concerns\BelongsToParentComponent;
-use Illuminate\Support\Js;
+use Guava\Tutorials\Steps\Step;
+use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method Step getParentComponent()
+ */
 class TutorialAction extends StaticAction
 {
     use BelongsToParentComponent;
 
-    public function configure(): static
+    protected function setUp(): void
     {
-        $this->view = static::BUTTON_VIEW;
+        parent::setUp();
 
-        return $this;
+        $this->view = static::BUTTON_VIEW;
     }
 
     public function action(Closure | string | null $action): static
@@ -28,52 +32,44 @@ class TutorialAction extends StaticAction
         return parent::action($action);
     }
 
-    //    public function getLivewireClickHandler(): ?string
-    //    {
-    //        if ($parent = parent::getLivewireClickHandler()) {
-    //            return $parent;
-    //        }
-
-    //        $argumentsParameter = '';
-    //
-    //        if (count($arguments = $this->getArguments())) {
-    //            $argumentsParameter .= ', ';
-    //            $argumentsParameter .= Js::from($arguments);
-    //        }
-    //
-    //        return "mountTutorialAction('{$this->getName()}'{$argumentsParameter})";
-    //    }
-
-    //    public function getLivewireClickHandler(): ?string
-    //    {
-    //        if (! $this->isLivewireClickHandlerEnabled()) {
-    //            return null;
-    //        }
-    //
-    //        if (is_string($this->action)) {
-    //            return $this->action;
-    //        }
-    //
-    //        $argumentsParameter = '';
-    //
-    //        if (count($arguments = $this->getArguments())) {
-    //            $argumentsParameter .= ', ';
-    //            $argumentsParameter .= Js::from($arguments);
-    //        }
-    //
-    //        return "mountTutorialAction('{$this->getName()}'{$argumentsParameter})";
-    //    }
+    public function getExtraAttributes(): array
+    {
+        return [
+            ...$this->extraAttributes,
+            'wire:loading.attr' => 'disabled-fix',
+        ];
+    }
 
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
     {
-        //        dd('livewire', $this->getLivewire());
         return match ($parameterName) {
-            'livewire' => [$this->getLivewire()],
-            'tutorial' => [$this->getParentComponent()->getContainer()],
+            'livewire' => [$this->getParentComponent()->getLivewire()],
             'step' => [$this->getParentComponent()],
-            //            'model' => [$this->getModel()],
-            //            'record' => [$this->getRecord()],
+            'tutorial' => [$this->getParentComponent()->getContainer()],
+            'get' => [$this->getParentComponent()->getGetCallback()],
+            'component' => [$this->getParentComponent()->getFormComponent()],
+            'model' => [$this->getParentComponent()->getLivewire()->getModel()],
+            'record' => [$this->getParentComponent()->getLivewire()->getRecord()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
+    }
+
+    protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
+    {
+        $record = $this->getParentComponent()->getLivewire()->getRecord();
+
+        if (! $record) {
+            return parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType);
+        }
+
+        return match ($parameterType) {
+            Model::class, $record::class => [$record],
+            default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
+        };
+    }
+
+    public static function getDefaultName(): ?string
+    {
+        return uniqid('tutorial-action-');
     }
 }

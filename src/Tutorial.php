@@ -14,6 +14,11 @@ class Tutorial extends ComponentContainer
         return $this->getState('index') + ($human ? 1 : 0);
     }
 
+    public function isFirstStep(): bool
+    {
+        return $this->getLivewire()->getIndex() === 0;
+    }
+
     public function isLastStep(): bool
     {
         return $this->getLivewire()->getIndex(true) === $this->getTotalSteps();

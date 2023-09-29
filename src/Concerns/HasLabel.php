@@ -6,11 +6,11 @@ use Closure;
 
 trait HasLabel
 {
-    public string|Closure|null $label = null;
+    public string | Closure | null $label = null;
 
-    public bool|Closure $hiddenLabel = false;
+    public bool | Closure $hiddenLabel = false;
 
-    public function label(string|Closure $label): static
+    public function label(string | Closure $label): static
     {
         $this->label = $label;
 
@@ -22,7 +22,7 @@ trait HasLabel
         return $this->evaluate($this->label);
     }
 
-    public function hiddenLabel(bool|Closure $condition = true): static
+    public function hiddenLabel(bool | Closure $condition = true): static
     {
         $this->hiddenLabel = $condition;
 

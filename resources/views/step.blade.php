@@ -8,25 +8,23 @@
         x-data="stepComponent({
             key: '{{$getKey()}}',
             selector: '{{$getSelector()}}',
-            requiresAction: @js($isActionRequired()),
+            shouldInterceptClick: @js($shouldInterceptClick()),
+            interceptClickAction: @js($getInterceptClickAction()),
         })"
 
         class="absolute top-0 left-0"
 
         @style([
-            \Filament\Support\get_color_css_variables($getColor(), shades: [400, 500, 600]) => $getColor() !== 'gray',
+            \Filament\Support\get_color_css_variables($getColor(), shades: [400, 500, 600, 950]) => $getColor() !== 'gray',
         ])
-
 >
-    <div
-            x-bind:init="initialize()"></div>
     <div
             data-dialog
             @class([
                 'absolute top-0 left-0 flex flex-col gap-2',
                 match ($getColor()) {
-                    'gray' => 'text-gray-950 dark:text-white',
-                    default => 'text-custom-600 dark:text-custom-400',
+                    'gray' => 'text-gray-950',
+                    default => 'text-custom-400',
                 },
             ])
 
@@ -49,12 +47,11 @@
         <svg data-dialog-stroke class="w-full h-auto fill-none overflow-visible">
             <path
                     data-dialog-path
-                    {{--                    x-on:DOMContentLoaded.document="console.log('DOM LOADED');$el.setAttribute('d', elementPath(null, {relative: true, positive: true}))"--}}
                     @class([
-                        'stroke-2',
+                        'stroke-[4px]',
                         match ($getColor()) {
-                            'gray' => 'stroke-gray-950 dark:text-white',
-                            default => 'stroke-custom-600 dark:stroke-custom-400',
+                            'gray' => 'stroke-gray-950',
+                            default => 'stroke-custom-400',
                         },
                     ])
             />
@@ -66,11 +63,15 @@
                 />
             @endif
 
-            @if(! $isActionHidden() && $action = $getAction())
-                {{--            <button type="button" wire:click="setActiveS
-                tep('email')" class="pointer-events-auto">Test</button>--}}
-                <span class="ml-auto">{{$action}}</span>
-            @endif
+            @php
+                \Illuminate\Support\Facades\Log::info('actions', [
+                'actions' => $getActions(),
+            ]);
+            @endphp
+            <x-tutorials::step.actions
+                    :actions="$getActions()"
+                    :color="$getColor()"
+            />
         </div>
     </div>
 
@@ -80,7 +81,7 @@
                 {{--                <circle r="50" cx="50" cy="50"/>--}}
                 <path
                         data-clip-path
-                        x-bind:d="clipPath()"
+                        {{--                        x-bind:d="clipPath()"--}}
                 />
             </clipPath>
 

@@ -21,7 +21,8 @@
         "livewire/livewire": "^3.0@beta"
     },
     "require-dev": {
-        "orchestra/testbench": "^8.0"
+        "orchestra/testbench": "^8.0",
+        "laravel/pint": "^1.11"
     },
     "extra": {
         "laravel": {

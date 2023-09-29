@@ -2,20 +2,25 @@
 
 namespace Guava\Tutorials;
 
-use Filament\Forms\Components\Component;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Get;
 use Filament\Support\Components\ViewComponent;
+use Filament\Support\Concerns\HasColor;
 use Guava\Tutorials\Contracts\HasTutorials;
+use Guava\Tutorials\Filament\Actions\CompleteTutorialAction;
+use Guava\Tutorials\Filament\Actions\NextStepAction;
+use Guava\Tutorials\Filament\Actions\PreviousStepAction;
+use Guava\Tutorials\Filament\Actions\SkipTutorialAction;
 use Illuminate\Database\Eloquent\Model;
 
 class ComponentContainer extends ViewComponent
 {
     use Concerns\BelongsToLivewire;
-    use Concerns\HasState;
-    use Concerns\HasSteps;
     use Concerns\HasLifecycleEvents;
-    use Concerns\CanBeCompleted;
+    use Concerns\CanHaveFormCallbacks;
+    use Concerns\HasName;
+    use Concerns\HasLabel;
+    use Concerns\HasSteps;
+    use Concerns\HasActions;
+    use HasColor;
 
     protected string $view = 'tutorials::component-container';
 
@@ -26,56 +31,51 @@ class ComponentContainer extends ViewComponent
     final public function __construct(HasTutorials $livewire)
     {
         $this->livewire($livewire);
-        //        $this->statePath = 'mountedTutorialData';
-        //        $this->state('index', 0);
+
+        $this->configure();
+    }
+
+    public function configure(): static
+    {
+        return $this
+            ->color('primary')
+            ->previousStepAction(PreviousStepAction::make())
+            ->nextStepAction(NextStepAction::make())
+            ->skipTutorialAction(SkipTutorialAction::make())
+            ->completeTutorialAction(CompleteTutorialAction::make())
+        ;
     }
 
     public static function make(HasTutorials $livewire): static
     {
-        return app(static::class, ['livewire' => $livewire]);
+        return app(static::class, [
+            'livewire' => $livewire,
+        ]);
     }
 
-    protected function getGetCallback(): callable
-    {
-        $component = new Component();
-        /** @var HasForms $livewire */
-        $livewire = $this->getLivewire();
-        $form = $livewire->getForm('form');
-        $component->container($form);
-
-        return new Get($component);
-    }
-
-    /**
-     * @param string $parameterName
-     * @return array
-     */
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
     {
         return match ($parameterName) {
             'livewire' => [$this->getLivewire()],
-            'get' => [$this->getGetCallback()],
+            'tutorial', 'container' => [$this],
             'model' => [$this->getLivewire()->getModel()],
             'record' => [$this->getLivewire()->getRecord()],
+            'get' => [$this->getGetCallback()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
     }
 
-    //    /**
-    //     * @return array<mixed>
-    //     */
-    //    protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
-    //    {
-    //        $record = $this->getRecord();
-    //
-    //        if (! $record) {
-    //            return parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType);
-    //        }
-    //
-    //        return match ($parameterType) {
-    //            Model::class, $record::class => [$record],
-    //            default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
-    //        };
-    //    }
+    protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
+    {
+        $record = $this->getLivewire()->getRecord();
 
+        if (! $record) {
+            return parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType);
+        }
+
+        return match ($parameterType) {
+            Model::class, $record::class => [$record],
+            default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
+        };
+    }
 }

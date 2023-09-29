@@ -1,5 +1,5 @@
 @props([
-    '$description' => null
+    'description' => null
 ])
 
 @if($description)

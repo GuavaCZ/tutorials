@@ -8,11 +8,6 @@ class FieldSelector extends Selector
 {
     protected string $selector;
 
-    public function __construct(string $selector)
-    {
-        $this->selector = $selector;
-    }
-
     public function getSelector(): string
     {
         return $this->selector;
@@ -40,7 +35,6 @@ class FieldSelector extends Selector
 
     public static function fromLivewire($value): static
     {
-//        $selector = Arr::get($value, 'selector');
         $class = Arr::pull($value, 'class');
 
         return app($class, $value);
