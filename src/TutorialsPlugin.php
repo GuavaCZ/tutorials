@@ -5,43 +5,41 @@ namespace Guava\Tutorials;
 use Filament;
 use Filament\Contracts\Plugin;
 use Guava\Tutorials\Contracts\HasTutorials;
-use Guava\Tutorials\Livewire\Components\StepContainer;
-use Guava\Tutorials\Livewire\Components\TutorialContainer;
-use Guava\Tutorials\View\Components\Tutorials;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\View\View;
-use Livewire\Livewire;
 
 class TutorialsPlugin implements Plugin
 {
+    protected bool $shouldShowTutorialsMenu = false;
+
     public function getId(): string
     {
         return 'guava::tutorials';
     }
 
+    public function shouldShowTutorialsMenu(bool $condition = true): static
+    {
+        $this->shouldShowTutorialsMenu = $condition;
+
+        return $this;
+    }
+
+    public function isShouldShowTutorialsMenu(): bool
+    {
+        return $this->shouldShowTutorialsMenu;
+    }
+
     public function register(Filament\Panel $panel): void
     {
-
-        $panel->renderHook(
-            'panels::user-menu.after',
-            fn (): string | View => request()->route()->controller instanceof HasTutorials
-                ? view('tutorials::components.help', [
-                    'livewire' => request()->route()->controller,
-                ])
-                : '',
-        );
-//        Livewire::component('tutorials::tutorial-container', TutorialContainer::class);
-//        Livewire::component('tutorials::step-container', StepContainer::class);
-
-//        $panel->renderHook(
-//            'panels::page.end',
-//            fn (): View => view('tutorials::render-hook', [
-//                'livewire' => request()->route()->controller instanceof HasTutorials
-//                    ? request()->route()->controller
-//                    : null,
-//            ]),
-//            //            fn (): string => Blade::renderComponent(new Tutorials()),
-//        );
+        if ($this->isShouldShowTutorialsMenu()) {
+            $panel->renderHook(
+                'panels::user-menu.after',
+                fn (): string | View => request()->route()->controller instanceof HasTutorials
+                    ? view('tutorials::components.help', [
+                        'livewire' => request()->route()->controller,
+                    ])
+                    : '',
+            );
+        }
     }
 
     public function boot(Filament\Panel $panel): void

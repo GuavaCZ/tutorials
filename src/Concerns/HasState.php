@@ -14,8 +14,6 @@ trait HasState
 
         data_set($livewire, $this->getStatePath($key), $this->evaluate($state));
 
-//        dump($livewire, $this->getStatePath($key));
-
         return $this;
     }
 
@@ -42,17 +40,8 @@ trait HasState
             $key
         ]);
 
-//        if (isset($this->cachedSta)) {
-//            return $this->cachedAbsoluteStatePath;
-//        }
-
         $pathComponents = [];
 
-//        $pathComponents[] = 'tutorialData';
-        //        if ($containerStatePath = $this->getContainer()->getStatePath()) {
-        //            $pathComponents[] = $containerStatePath;
-        //        }
-        //
         if ($this->hasStatePath()) {
             $pathComponents[] = $this->statePath;
         }
@@ -60,8 +49,6 @@ trait HasState
         $pathComponents[] = $key;
 
         return implode('.', $pathComponents);
-
-//        return $this->cachedAbsoluteStatePath = implode('.', $pathComponents);
     }
 
     public function hasStatePath(): bool

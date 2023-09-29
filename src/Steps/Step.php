@@ -5,7 +5,6 @@ namespace Guava\Tutorials\Steps;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasColor;
 use Guava\Tutorials\Concerns;
-use Guava\Tutorials\Contracts\HasTutorials;
 use Guava\Tutorials\Selectors\FieldSelector;
 use Guava\Tutorials\Selectors\Selector;
 use Guava\Tutorials\Tutorial;
@@ -14,10 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 class Step extends ViewComponent
 {
     use Concerns\BelongsToContainer;
-
-    //    use Concerns\BelongsToModel;
-    //    use Concerns\CanBeConcealed;
-    //    use Concerns\CanBeDisabled;
     use Concerns\CanBeHidden;
     use Concerns\HasKey;
     use Concerns\HasName;

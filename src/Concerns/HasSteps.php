@@ -59,13 +59,6 @@ trait HasSteps
             function (array $carry, Step $step): array {
                 $carry[] = $step;
 
-                //                foreach ($step->getChildComponentContainers($withHidden) as $childComponentContainer) {
-                //                    $carry = [
-                //                        ...$carry,
-                //                        ...$childComponentContainer->getFlatComponents($withHidden),
-                //                    ];
-                //                }
-
                 return $carry;
             },
             initial: [],
@@ -84,22 +77,6 @@ trait HasSteps
                     ! $step->hasActions(),
                     fn () => $step->actions($this->getActions())
                 )
-//                ->when(
-//                    ($action = $step->getNextStepAction()) === null,
-//                    fn () => $step->nextStepAction($action),
-//                )
-//                ->when(
-//                    ($action = $step->getPreviousAction()) === null,
-//                    fn () => $step->previousStepAction($action),
-//                )
-//                ->when(
-//                    ($action = $step->getSkipTutorialAction()) === null,
-//                    fn () => $step->skipTutorialAction($action),
-//                )
-//                ->when(
-//                    ($action = $step->getCompleteTutorialAction()) === null,
-//                    fn () => $step->completeTutorialAction($action),
-//                )
             ;
 
             return $step;

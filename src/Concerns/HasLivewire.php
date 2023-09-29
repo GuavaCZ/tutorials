@@ -3,7 +3,6 @@
 namespace Guava\Tutorials\Concerns;
 
 use Livewire\Component;
-use Livewire\Livewire;
 
 trait HasLivewire
 {

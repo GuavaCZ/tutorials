@@ -8,11 +8,6 @@ class FieldSelector extends Selector
 {
     protected string $selector;
 
-    public function __construct(string $selector)
-    {
-        $this->selector = $selector;
-    }
-
     public function getSelector(): string
     {
         return $this->selector;

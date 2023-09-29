@@ -16,6 +16,8 @@ class PreviousStepAction extends TutorialAction
         $this->icon('heroicon-o-arrow-left-circle');
 
         $this->label(__('tutorials::step.previous'));
+        $this->keyBindings('shift+tab');
+
 
         $this->action('previousTutorialStep()');
     }

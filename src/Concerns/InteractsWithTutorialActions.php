@@ -42,7 +42,7 @@ trait InteractsWithTutorialActions
     /**
      * @param  string | array<string>  $name
      */
-    public function getTutorialAction(array|string $name): ?Action
+    public function getTutorialAction(array | string $name): ?Action
     {
         if (is_string($name) && str($name)->contains('.')) {
             $name = explode('.', $name);
@@ -64,7 +64,7 @@ trait InteractsWithTutorialActions
         } elseif (method_exists($this, $name)) {
             $methodName = $name;
         } else {
-//            return null;
+            //            return null;
         }
 
         $action = Action::configureUsing(
@@ -115,24 +115,7 @@ trait InteractsWithTutorialActions
 
         $action->arguments($arguments);
 
-        // Changes below here probably
-
-//        $this->cacheMountedActionForm();
-
         try {
-//            $hasForm = $this->mountedActionHasForm();
-//
-//            if ($hasForm) {
-//                $action->callBeforeFormFilled();
-//            }
-
-//            $action->mount([
-//                'form' => $this->getMountedActionForm(),
-//            ]);
-//
-//            if ($hasForm) {
-//                $action->callAfterFormFilled();
-//            }
         } catch (Halt $exception) {
             return null;
         } catch (Cancel $exception) {
@@ -141,15 +124,7 @@ trait InteractsWithTutorialActions
             return null;
         }
 
-//        if (! $this->mountedActionShouldOpenModal()) {
-            return $this->callMountedTutorialAction();
-//        }
-
-//        $this->resetErrorBag();
-//
-//        $this->openActionModal();
-
-//        return null;
+        return $this->callMountedTutorialAction();
     }
 
     public function unmountTutorialAction(bool $shouldCancelParentActions = true): void
@@ -176,18 +151,7 @@ trait InteractsWithTutorialActions
         }
 
         if (! count($this->mountedTutorialActions)) {
-//            $this->closeActionModal();
-//
-//            $action?->clearRecordAfter();
-
-            return;
         }
-
-//        $this->cacheMountedActionForm();
-
-//        $this->resetErrorBag();
-
-//        $this->openActionModal();
     }
 
     protected function popMountedTutorialAction(): ?string
@@ -227,25 +191,15 @@ trait InteractsWithTutorialActions
             ...$arguments,
         ]);
 
-//        $form = $this->getMountedActionForm();
-
         $result = null;
 
         $originallyMountedActions = $this->mountedTutorialActions;
 
         try {
-//            if ($this->mountedActionHasForm()) {
-//                $action->callBeforeFormValidated();
-//
-//                $action->formData($form->getState());
-//
-//                $action->callAfterFormValidated();
-//            }
-
             $action->callBefore();
 
             $result = $action->call([
-//                'form' => $form,
+                //                'form' => $form,
             ]);
 
             $result = $action->callAfter() ?? $result;
@@ -257,12 +211,10 @@ trait InteractsWithTutorialActions
         }
 
         $action->resetArguments();
-//        $action->resetFormData();
 
         // If the action was replaced while it was being called,
         // we don't want to unmount it.
         if ($originallyMountedActions !== $this->mountedTutorialActions) {
-//            $action->clearRecordAfter();
 
             return null;
         }
