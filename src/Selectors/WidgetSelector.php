@@ -9,8 +9,6 @@ class WidgetSelector extends Selector
         parent::__construct($selector);
     }
 
-
-
     public function __toString(): string
     {
         return ".fi-wi > div:nth-child({$this->selector})";
