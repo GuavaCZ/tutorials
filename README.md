@@ -28,6 +28,17 @@ a lot of these steps should be familiar to you already.
 composer require guava/tutorials
 ```
 
+### Add plugin to your filament dashboard
+
+```php
+use Guava\Tutorials\TutorialsPlugin;
+
+$panel->plugins([
+    TutorialsPlugin::make(),
+    //
+])
+```
+
 ### Add tutorials to your livewire component (or filament page)
 
 To get started, you need to do the following:
