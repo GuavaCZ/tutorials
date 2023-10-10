@@ -18,7 +18,7 @@
     "require": {
         "filament/filament": "^3.0.0",
         "spatie/laravel-package-tools": "^1.15",
-        "livewire/livewire": "^3.0@beta"
+        "livewire/livewire": "^3.0"
     },
     "require-dev": {
         "orchestra/testbench": "^8.0",

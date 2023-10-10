@@ -7,10 +7,14 @@ export default function stepComponent({
     return {
         target: null,
 
-        init: function () {
+        sleep: function (ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        },
+
+        init: async function () {
             this.target = this.findElement(key);
 
-            if (! this.target) {
+            if (!this.target) {
                 console.error('Tutorial step was not found:', key);
                 return;
             }
@@ -25,19 +29,11 @@ export default function stepComponent({
 
             this.configure();
 
-            // setTimeout(() => {
-            console.log('initialize');
-            console.log('this.$el', this.$el);
             const dialog = this.$el.querySelector('[data-dialog]');
-            console.log('dialogos', dialog);
             const clipPath = this.$el.querySelector('[data-clip-path]');
-            console.log('clipPath', clipPath);
-            console.log('shouldInterceptClick', shouldInterceptClick);
 
             if (shouldInterceptClick) {
                 this.target.addEventListener('click', (event) => {
-                    console.log('INTERCEPT2');
-                    // event.stopPropagation();
                     event.preventDefault();
                     this.$wire.call(interceptClickAction);
 
@@ -59,7 +55,6 @@ export default function stepComponent({
             });
 
             clipPath.setAttribute('d', this.clipPath());
-            // }, 1);
         },
 
         timeouts: [],
@@ -84,8 +79,6 @@ export default function stepComponent({
                 }
             });
 
-            console.log('configure');
-            console.log(this.target.tagName);
 
             if (this.target instanceof HTMLSelectElement) {
                 if (this.target.hasAttribute('data-choice')) {
@@ -98,19 +91,10 @@ export default function stepComponent({
             if (this.target.tagName === 'TRIX-EDITOR') {
                 this.timeouts['trix'] = this.target.clientHeight;
                 this.target = this.target.parentElement;
-                console.log('is trix');
-
 
                 const observer = new MutationObserver((mutationsList, observer) => {
 
-                    console.log('resized');
-                    // this.initialize();
                     mutationsList.forEach((mutation) => {
-                        console.log('mutation', mutation);
-                        // let height = mutation.target.clientHeight;
-
-                        // if (height != this.timeouts['trix-height']) {
-                        //     this.timeouts['trix-height'] = height;
 
                         if (this.timeouts['trix']) {
                             clearTimeout(this.timeouts['trix']);
@@ -120,18 +104,6 @@ export default function stepComponent({
                             this.timeouts['trix'] = null;
                             this.init();
                         }, 500);
-                        // }
-
-                        //     if (mutation.type === 'attributes') {
-                        //         if (mutation.attributeName === 'width' || mutation.attributeName === 'height') {
-                        //             const target = mutation.target;
-                        //             const newWidth = target.offsetWidth; // or target.style.width
-                        //             const newHeight = target.offsetHeight; // or target.style.height
-                        //
-                        //             console.log(`Width changed to: ${newWidth}`);
-                        //             console.log(`Height changed to: ${newHeight}`);
-                        //         }
-                        //     }
                     });
                 });
 
@@ -147,7 +119,6 @@ export default function stepComponent({
             }
 
             if (this.target instanceof HTMLTextAreaElement || this.t) {
-                console.log('is textarea');
                 // Get the initial size of the textarea
                 let initialWidth = this.target.offsetWidth;
                 let initialHeight = this.target.offsetHeight;
@@ -155,7 +126,6 @@ export default function stepComponent({
                 // Create a MutationObserver to monitor size changes
                 const observer = new MutationObserver(() => {
                     if (this.target.offsetWidth !== initialWidth || this.target.offsetHeight !== initialHeight) {
-                        console.log('Textarea was resized.');
                         initialWidth = this.target.offsetWidth;
                         initialHeight = this.target.offsetHeight;
 
@@ -182,7 +152,6 @@ export default function stepComponent({
             }
             const dialogPath = dialog.querySelector('[data-dialog-path]');
 
-            console.log('initializeDialog');
             const rect = this.elementRect();
             // const header = dialog.querySelector('[data-dialog-header]');
             const stroke = dialog.querySelector('[data-dialog-stroke]');
@@ -195,36 +164,11 @@ export default function stepComponent({
 
             const width = rect[1].x - rect[0].x;
             const height = rect[2].y - rect[0].y;
-            console.log('IMPORTANT HERE');
-            console.log('width', width);
-            console.log('height', height);
-            // var y1 = header.getBoundingClientRect().top;
-            // var y2 = stroke.getBoundingClientRect().top;
-
-            // var distance = y2 - y1;
-
-            // console.log('distance', distance, y2, y1);
-            console.log('rect', rect);
 
             const x = rect[0].x;
             const y = rect[0].y;
-            console.log('x', x);
-            console.log('y', y);
-            console.log('dialog', dialog);
-            // dialog = this.$el.querySelector('[data-dialog]');
             dialog.style.width = `${width}px`;
             dialog.style.transform = `translate(${x}px, ${y}px)`;
-            // console.log('Delayed dialog', dialog);
-
-            // document.querySelectorAll('[data-dialog]').forEach((dialog) => {
-            //    dialog.remove();
-            // });
-            // console.log('self.$el', self.$el);
-            // self.$el.appendChild(dialog);
-            // console.log(document.getElementById('something'));
-            // document.getElementById('something').appendChild(dialog);
-            // document.body.appendChild(dialog);
-            // }, 1000);
             stroke.style.height = `${height}px`;
 
             dialogPath.setAttribute('d', this.elementPath(null, {relative: true, positive: true}))
@@ -297,8 +241,6 @@ export default function stepComponent({
 
             element = element || this.target;
             const bounds = element.getBoundingClientRect();
-            console.log('bounds', bounds.left, bounds.top);
-            console.log('offset', element.offsetLeft, element.offsetTop);
             options = {
                 radius: 24,
                 margin: 10,
@@ -308,7 +250,6 @@ export default function stepComponent({
             }
             const left = options.relative ? 0 : bounds.left;
             const top = options.relative ? 0 : element.offsetTop;
-            console.log('left/top', left, top);
 
             let result = [
                 {
