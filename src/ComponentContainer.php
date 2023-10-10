@@ -14,12 +14,12 @@ use Illuminate\Database\Eloquent\Model;
 class ComponentContainer extends ViewComponent
 {
     use Concerns\BelongsToLivewire;
-    use Concerns\HasLifecycleEvents;
     use Concerns\CanHaveFormCallbacks;
-    use Concerns\HasName;
-    use Concerns\HasLabel;
-    use Concerns\HasSteps;
     use Concerns\HasActions;
+    use Concerns\HasLabel;
+    use Concerns\HasLifecycleEvents;
+    use Concerns\HasName;
+    use Concerns\HasSteps;
     use HasColor;
 
     protected string $view = 'tutorials::component-container';

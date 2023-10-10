@@ -7,7 +7,6 @@ use Livewire\Wireable;
 
 class Selector implements Wireable
 {
-
     protected string $selector;
 
     public function __construct(string $selector)
@@ -45,5 +44,4 @@ class Selector implements Wireable
 
         return static::make($selector);
     }
-
 }

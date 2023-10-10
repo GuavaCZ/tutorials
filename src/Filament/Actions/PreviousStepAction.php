@@ -18,7 +18,6 @@ class PreviousStepAction extends TutorialAction
         $this->label(__('tutorials::step.previous'));
         $this->keyBindings('shift+tab');
 
-
         $this->action('previousTutorialStep()');
     }
 

@@ -13,8 +13,8 @@ use Guava\Tutorials\Tutorial;
 
 trait InteractsWithTutorials
 {
-    use ResolvesDynamicLivewireProperties;
     use HandlesTutorialState;
+    use ResolvesDynamicLivewireProperties;
 
     /**
      * @var array<string, Tutorial>

@@ -37,7 +37,7 @@ trait HasState
 
         return implode('.', [
             'mountedTutorialData',
-            $key
+            $key,
         ]);
 
         $pathComponents = [];

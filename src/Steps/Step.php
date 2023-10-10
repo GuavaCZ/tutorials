@@ -14,17 +14,17 @@ class Step extends ViewComponent
 {
     use Concerns\BelongsToContainer;
     use Concerns\CanBeHidden;
-    use Concerns\HasKey;
-    use Concerns\HasName;
-    use Concerns\HasLabel;
-    use Concerns\HasHint;
-    use Concerns\HasDescription;
     use Concerns\CanBeInteracted;
-    use Concerns\RequiresAction;
-    use Concerns\HasActions;
     use Concerns\CanHaveFormCallbacks;
-    use Concerns\CanPassThrough;
     use Concerns\CanInterceptClick;
+    use Concerns\CanPassThrough;
+    use Concerns\HasActions;
+    use Concerns\HasDescription;
+    use Concerns\HasHint;
+    use Concerns\HasKey;
+    use Concerns\HasLabel;
+    use Concerns\HasName;
+    use Concerns\RequiresAction;
     use HasColor;
 
     protected string $view = 'tutorials::step';

@@ -2,7 +2,6 @@
 
 namespace Guava\Tutorials\Concerns;
 
-
 use Filament\Support\Components\Component;
 
 trait BelongsToParentComponent
