@@ -179,6 +179,17 @@ Step::make(ComponentSelector::make('username'));
 ```
 All variants are the same, use whichever you prefer.
 
+#### Widget Selector
+Use this selector to target Widgets.
+
+```php
+use Guava\Tutorials\Selectors\WidgetSelector;
+
+// Currently only the "index" of the widget is supported
+// So first widget = 1, second widget = 2, etc.
+Step::make(WidgetSelector::make(1));
+```
+
 #### (Generic) Selector
 A generic selector can be used to target elements using a CSS selector, such as:
 
