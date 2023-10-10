@@ -1,3 +1,6 @@
+![Guava Tutorials Banner](./docs/images/banner.jpg)
+
+
 ### Tutorials
 
 Tutorials is a complete tool for creating tutorials, walkthroughs and onboarding experiences for your users. It is a
