@@ -45,6 +45,19 @@ a lot of these steps should be familiar to you already.
 composer require guava/tutorials
 ```
 
+### Add assets to your theme
+You will require a custom theme to use this plugin.
+In your theme's `tailwind.config.js` file, add the following to your content array:
+```js
+export default {
+    presets: [preset],
+    content: [
+        // ... 
+        './vendor/guava/tutorials/resources/**/*.php',
+    ],
+}
+```
+
 ### Add plugin to your filament dashboard
 
 ```php
