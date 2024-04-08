@@ -9,8 +9,6 @@ use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Support\Colors\Color;
-use Filament\Support\Facades\FilamentColor;
 use Guava\Tutorials\Tutorial;
 
 trait InteractsWithTutorials
