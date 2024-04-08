@@ -1,4 +1,4 @@
-![Guava Tutorials Banner](./docs/images/banner.jpg)
+![Guava Tutorials Banner](https://github.com/GuavaCZ/tutorials/raw/alpha/docs/images/banner.jpg)
 
 ### Tutorials
 
@@ -11,11 +11,11 @@ The tutorials plugin is currently in alpha version and thus not production-ready
 
 ## Showcase
 
-![Screenshot 1](./docs/images/screenshot_01.png)
-![Screenshot 2](./docs/images/screenshot_02.png)
+![Screenshot 1](https://github.com/GuavaCZ/tutorials/raw/main/docs/images/screenshot_01.png)
+![Screenshot 2](https://github.com/GuavaCZ/tutorials/raw/main/docs/images/screenshot_02.png)
 
-[Video Showcase 1](./docs/videos/screencast_01.mov)
-[Video Showcase 2](./docs/videos/screencast_02.mov)
+[Video Showcase 1](https://github.com/GuavaCZ/tutorials/blob/main/docs/videos/screencast_01.mov)
+[Video Showcase 2](https://github.com/GuavaCZ/tutorials/blob/main/docs/videos/screencast_02.mov)
 
 ## Support us
 
